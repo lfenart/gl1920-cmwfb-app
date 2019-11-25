@@ -46,7 +46,6 @@ public class HelloIT {
 	@BeforeClass
 	public static void setupWebDriver() {
 		try {
-			System.setProperty("phantomjs.binary.path", "D:\\java\\gl\\phantomjs.exe");
 			String mvnit = System.getProperty("phantomjs.binary.path");
 			if (mvnit != null && mvnit.length() > 0) {
 				driver = Class.forName("org.openqa.selenium.phantomjs.PhantomJSDriver").asSubclass(WebDriver.class)
