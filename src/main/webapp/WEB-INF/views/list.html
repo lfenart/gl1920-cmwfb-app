@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Tests list</title>
+</head>
+<body>
+	<ul id="tests">
+		<li th:each="test: ${tests}" th:id="${'test_' + test.id }">[[${test.name}]]</li>
+	</ul>
+	<form th:action=" @{/create} " method="POST" accept-charset="UTF-8">
+		<input type="text" name="testName"><br> <input
+			type="submit" name="create" value="create">
+	</form>
+</body>
+</html>
