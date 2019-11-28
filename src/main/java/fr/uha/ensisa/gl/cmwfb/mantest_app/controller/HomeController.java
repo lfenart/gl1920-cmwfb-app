@@ -43,4 +43,13 @@ public class HomeController {
 		daoFactory.getTestDao().persist(newTest);
 		return "redirect:/list";
 	}
+
+	@RequestMapping(value = "/delete")
+	public String delete(@RequestParam(required = true) long id) {
+		Test test = daoFactory.getTestDao().find(id);
+		if (test != null) {
+			daoFactory.getTestDao().remove(test);
+		}
+		return "redirect:/list";
+	}
 }
