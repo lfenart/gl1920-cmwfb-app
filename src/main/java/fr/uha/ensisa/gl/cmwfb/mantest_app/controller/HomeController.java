@@ -43,4 +43,11 @@ public class HomeController {
 		daoFactory.getTestDao().persist(newTest);
 		return "redirect:/list";
 	}
+	
+	@RequestMapping(value = "/test")
+	public ModelAndView test(@RequestParam(required = true) long id) {
+		ModelAndView ret = new ModelAndView("test");
+		ret.addObject("test", daoFactory.getTestDao().find(id));
+		return ret;
+	}
 }
