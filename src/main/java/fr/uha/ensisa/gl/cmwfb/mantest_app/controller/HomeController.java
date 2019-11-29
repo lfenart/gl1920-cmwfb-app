@@ -50,4 +50,13 @@ public class HomeController {
 		ret.addObject("test", daoFactory.getTestDao().find(id));
 		return ret;
 	}
+
+	@RequestMapping(value = "/delete")
+	public String delete(@RequestParam(required = true) long id) {
+		Test test = daoFactory.getTestDao().find(id);
+		if (test != null) {
+			daoFactory.getTestDao().remove(test);
+		}
+		return "redirect:/list";
+	}
 }
