@@ -52,4 +52,21 @@ public class HomeController {
 		}
 		return "redirect:/list";
 	}
+	
+	@RequestMapping(value = "/test")
+	public ModelAndView test(@RequestParam(required = true) long id) {
+		ModelAndView ret = new ModelAndView("test");
+		Test test = daoFactory.getTestDao().find(id);
+		if (test == null) {
+			return testNotFound();
+		} else {
+			ret.addObject("test", test);
+			return ret;
+		}
+	}
+
+	private ModelAndView testNotFound() {
+		return new ModelAndView("notest");
+	}
+
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Test [[${test.name}]] (#[[${test.id}]])</title>
+</head>
+<body>
+	<header>
+		<h1>Test #[[${test.id}]]</h1>
+	</header>
+	<section>
+		<div id="content">
+			<h2>[[${test.name}]]</h2>
+			<div id="actions">
+				<h3>Actions</h3>
+				<ul id="action-list">
+					<li th:each="action: ${test.actions}">[[${action}]]</li>
+				</ul>
+			</div>
+			<div>
+				<h3>Resultat</h3>
+				<p>[[${test.result}]]</p>
+			</div>
+		</div>
+	</section>
+	<footer> </footer>
+</body>
+</html>
