@@ -9,19 +9,13 @@
 		<h1>Test #[[${test.id}]]</h1>
 	</header>
 	<section>
-		<div id="tools">
-			<nav>
-				<a th:href="${'/edit?id=' + test.id}">Modifier</a> <a
-					th:href="${'/delete?id=' + test.id}">Supprimer</a>
-			</nav>
-		</div>
 		<div id="content">
 			<h2>[[${test.name}]]</h2>
 			<h3>Actions</h3>
-			<table>
-			</table>
+			<ul id="actions">
+				<li th:each="action: ${test.actions}">[[${action}]]</li>
+			</ul>
 		</div>
-		<a th:href="${'/run?id=' + test.id}">Lancer</a>
 	</section>
 	<footer> </footer>
 </body>

@@ -47,7 +47,17 @@ public class HomeController {
 	@RequestMapping(value = "/test")
 	public ModelAndView test(@RequestParam(required = true) long id) {
 		ModelAndView ret = new ModelAndView("test");
-		ret.addObject("test", daoFactory.getTestDao().find(id));
-		return ret;
+		Test test = daoFactory.getTestDao().find(id);
+		if (test == null) {
+			return testNotFound();
+		} else {
+			ret.addObject("test", test);
+			return ret;
+		}
 	}
+
+	private ModelAndView testNotFound() {
+		return new ModelAndView("notest");
+	}
+
 }
