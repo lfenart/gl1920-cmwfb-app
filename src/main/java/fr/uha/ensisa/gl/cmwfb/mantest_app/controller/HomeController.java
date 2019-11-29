@@ -43,13 +43,6 @@ public class HomeController {
 		daoFactory.getTestDao().persist(newTest);
 		return "redirect:/list";
 	}
-	
-	@RequestMapping(value = "/test")
-	public ModelAndView test(@RequestParam(required = true) long id) {
-		ModelAndView ret = new ModelAndView("test");
-		ret.addObject("test", daoFactory.getTestDao().find(id));
-		return ret;
-	}
 
 	@RequestMapping(value = "/delete")
 	public String delete(@RequestParam(required = true) long id) {
@@ -59,4 +52,21 @@ public class HomeController {
 		}
 		return "redirect:/list";
 	}
+	
+	@RequestMapping(value = "/test")
+	public ModelAndView test(@RequestParam(required = true) long id) {
+		ModelAndView ret = new ModelAndView("test");
+		Test test = daoFactory.getTestDao().find(id);
+		if (test == null) {
+			return testNotFound();
+		} else {
+			ret.addObject("test", test);
+			return ret;
+		}
+	}
+
+	private ModelAndView testNotFound() {
+		return new ModelAndView("notest");
+	}
+
 }
