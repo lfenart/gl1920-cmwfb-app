@@ -43,4 +43,17 @@ public class HomeController {
 		daoFactory.getTestDao().persist(newTest);
 		return "redirect:/list";
 	}
+	
+	@RequestMapping(value = "/testmodify")
+	public ModelAndView TestModify(@RequestParam(required = true) long id) throws IOException {
+		ModelAndView ret = new ModelAndView("testmodify");
+		ret.addObject("test", daoFactory.getTestDao().find(id));
+		return ret;
+	}
+	
+	@RequestMapping(value = "/testmodified")
+	public String TestModified(@RequestParam(required = true) long id, @RequestParam(required = true) String newTestName) throws IOException {
+		daoFactory.getTestDao().modify(id, newTestName);
+		return "redirect:/list";
+	}
 }
