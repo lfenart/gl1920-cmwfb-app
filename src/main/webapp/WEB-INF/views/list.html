@@ -6,7 +6,14 @@
 </head>
 <body>
 	<ul id="tests">
-		<li th:each="test: ${tests}" th:id="${'test_' + test.id }">[[${test.name}]]</li>
+		<li th:each="test: ${tests}" th:id="${'test_' + test.id }">[[${test.name}]] 
+		
+		<form th:action=" @{/testmodify} " method="POST" accept-charset="UTF-8">
+		<input type="hidden" name="id" th:value="${ test.id }"  />
+		<input type="submit" name="testmodify" value="testmodify"/>
+		</form>
+		
+		</li>
 	</ul>
 	<form th:action=" @{/create} " method="POST" accept-charset="UTF-8">
 		<input type="text" name="testName"><br> <input
