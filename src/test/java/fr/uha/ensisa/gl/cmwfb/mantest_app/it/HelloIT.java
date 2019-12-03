@@ -3,6 +3,8 @@ package fr.uha.ensisa.gl.cmwfb.mantest_app.it;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -93,4 +95,23 @@ public class HelloIT {
 		driver.get("http://localhost:" + port + "/hello?name=" + testName);
 		assertTrue("Sent name not found in page", driver.getPageSource().contains(testName));
 	}
+	
+	@Test
+	public void testConnection() throws Exception {
+		URL url = new URL("http://localhost:" + port + "/test?id=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.connect();
+        assertEquals(200, connection.getResponseCode());
+        url = new URL("http://localhost:" + port + "/test?id=1000");
+        connection = (HttpURLConnection) url.openConnection();
+        connection.connect();
+        assertEquals(200, connection.getResponseCode());
+	}
+	
+	@Test
+	public void testNotFound() {
+		driver.get("http://localhost:" + port + "/test?id=1000");
+		assertTrue(driver.getPageSource().contains("not found"));
+	}
+	
 }
