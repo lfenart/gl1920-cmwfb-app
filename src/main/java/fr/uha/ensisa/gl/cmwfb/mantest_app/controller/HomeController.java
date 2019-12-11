@@ -88,7 +88,7 @@ public class HomeController {
 		Test test = daoFactory.getTestDao().find(id);
 		Step step = new Step();
 		step.setText(stepText);
-		test.addStep(new Step());
+		test.addStep(step);
 		return "redirect:/test?id=" + id;
 	}
 
