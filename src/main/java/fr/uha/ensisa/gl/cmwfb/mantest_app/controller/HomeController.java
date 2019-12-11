@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import fr.uha.ensisa.gl.cmwfb.mantest.Step;
 import fr.uha.ensisa.gl.cmwfb.mantest.Test;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
 
@@ -44,19 +45,17 @@ public class HomeController {
 		return "redirect:/list";
 	}
 	
-	@RequestMapping(value = "/testmodify")
-	public ModelAndView TestModify(@RequestParam(required = true) long id) throws IOException {
-		ModelAndView ret = new ModelAndView("testmodify");
-		ret.addObject("test", daoFactory.getTestDao().find(id));
-		return ret;
+	@RequestMapping(value = "/testmodifiedname")
+	public String TestModifiedName(@RequestParam(required = true) long id, @RequestParam(required = true) String newTestName) throws IOException {
+		daoFactory.getTestDao().modifyName(id, newTestName);
+		return "redirect:/test?id="+id;
+	}
+	@RequestMapping(value = "/testmodifiedstep")
+	public String TestModifiedStep(@RequestParam(required = true) long testId, @RequestParam(required = true) int stepId, @RequestParam(required = true) String newStep) throws IOException {
+		daoFactory.getTestDao().modifyStep(testId, stepId, newStep);
+		return "redirect:/test?id="+testId;
 	}
 	
-	@RequestMapping(value = "/testmodified")
-	public String TestModified(@RequestParam(required = true) long id, @RequestParam(required = true) String newTestName) throws IOException {
-		daoFactory.getTestDao().modify(id, newTestName);
-		return "redirect:/list";
-	}
-
 	@RequestMapping(value = "/delete")
 	public String delete(@RequestParam(required = true) long id) {
 		Test test = daoFactory.getTestDao().find(id);
@@ -80,6 +79,15 @@ public class HomeController {
 
 	private ModelAndView testNotFound() {
 		return new ModelAndView("notest");
+	}
+	
+	@RequestMapping(value = "/addStep")
+	private String addStep(@RequestParam(required = true) long id, @RequestParam(required = true) String stepText) {
+		Test test = daoFactory.getTestDao().find(id);
+		Step step = new Step();
+		step.setText(stepText);
+		test.addStep(step);
+		return "redirect:/test?id=" + id;
 	}
 
 }
