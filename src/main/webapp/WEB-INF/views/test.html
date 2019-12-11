@@ -19,6 +19,11 @@
 				<ul id="step-list">
 					<li th:each="action: ${test.steps}">[[${action}]]</li>
 				</ul>
+				<form action="/addStep" method="GET" accept-charset="UTF-8">
+					<input type="hidden" name="id" th:value="${ test.id }" /> <input
+						type="text" name="stepText"> <input type="submit"
+						name="addStep" value="addStep">
+				</form>
 			</div>
 			<div>
 				<h3>Resultat</h3>

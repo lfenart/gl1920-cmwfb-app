@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import fr.uha.ensisa.gl.cmwfb.mantest.Step;
 import fr.uha.ensisa.gl.cmwfb.mantest.Test;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
 
@@ -80,6 +81,15 @@ public class HomeController {
 
 	private ModelAndView testNotFound() {
 		return new ModelAndView("notest");
+	}
+	
+	@RequestMapping(value = "/addStep")
+	private String addStep(@RequestParam(required = true) long id, @RequestParam(required = true) String stepText) {
+		Test test = daoFactory.getTestDao().find(id);
+		Step step = new Step();
+		step.setText(stepText);
+		test.addStep(new Step());
+		return "redirect:/test?id=" + id;
 	}
 
 }
