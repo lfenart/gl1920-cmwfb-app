@@ -1,6 +1,9 @@
 package fr.uha.ensisa.gl.cmwfb.mantest_app.it;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -8,8 +11,15 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.junit.*;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
+import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
+import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestDao;
+import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestSerieDao;
+import fr.uha.ensisa.gl.cmwfb.mantest_app.controller.TestSerieController;
 
 public class HelloIT {
 	public static WebDriver driver;
@@ -93,4 +103,38 @@ public class HelloIT {
 		driver.get("http://localhost:" + port + "/hello?name=" + testName);
 		assertTrue("Sent name not found in page", driver.getPageSource().contains(testName));
 	}
+	
+	@Mock public DaoFactory daoFactory;
+    @Mock public TestSerieDao daoTaskSerie;
+    @Mock public TestDao daoTask;
+    
+    public TestSerieController sutS;
+    
+    @Before
+    public void prepareDao() {
+            MockitoAnnotations.initMocks(this);
+            when(this.daoFactory.getTestSerieDao()).thenReturn(this.daoTaskSerie);
+            when(this.daoFactory.getTestDao()).thenReturn(this.daoTask);
+            sutS = new TestSerieController();
+            sutS.daoFactory = this.daoFactory;
+    }
+    
+    @Test
+    public void testAddTest() {
+            long dSerieId = 5L;
+            long dTestId = 3L;
+            fr.uha.ensisa.gl.cmwfb.mantest.TestSerie testSerie = mock(fr.uha.ensisa.gl.cmwfb.mantest.TestSerie.class);
+            when(daoTaskSerie.find(dSerieId)).thenReturn(testSerie);
+            
+            fr.uha.ensisa.gl.cmwfb.mantest.Test test = mock(fr.uha.ensisa.gl.cmwfb.mantest.Test.class);
+            when(daoTask.find(dTestId)).thenReturn(test);
+            
+            String ret = this.sutS.addTest(dSerieId, dTestId);
+            assertEquals(ret, "redirect:/viewSerie?id="+dSerieId);
+            
+            verify(this.daoTaskSerie).find(dSerieId);
+            verify(this.daoTask).find(dTestId);
+            verify(testSerie).add(test);
+            verify(this.daoTaskSerie).persist(testSerie);
+    }
 }
