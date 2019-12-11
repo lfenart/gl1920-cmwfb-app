@@ -6,7 +6,6 @@
 </head>
 <body>
 	<ul id="tests">
-<<<<<<< HEAD
 		<li th:each="test: ${tests}" th:id="${'test_' + test.id }">[[${test.name}]] 
 		
 		<form th:action=" @{/testmodify} " method="POST" accept-charset="UTF-8">
@@ -15,11 +14,9 @@
 		</form>
 		
 		</li>
-=======
 		<li th:each="test: ${tests}" th:id="${'test_' + test.id }"><a
 			th:href="${'/test?id=' + test.id}">[[${test.name}]]</a> <a
 			th:href="${'/delete?id=' + test.id}">Supprimer</a></li>
->>>>>>> 0335aed275ade9a9b771d4bf70f22129f1c3b55e
 	</ul>
 	<form th:action=" @{/create} " method="POST" accept-charset="UTF-8">
 		<input type="text" name="testName"><br> <input
