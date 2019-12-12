@@ -45,14 +45,42 @@ public class HomeController {
 		return "redirect:/list";
 	}
 	
+	
+	@RequestMapping(value = "/modify")
+	public ModelAndView modify(@RequestParam(required = true) long id) throws IOException {
+		ModelAndView ret = new ModelAndView("modify");
+		Test test = daoFactory.getTestDao().find(id);
+		if (test == null) {
+			return testNotFound();
+		} else {
+			ret.addObject("test", test);
+			return ret;
+		}
+	}
+	
 	@RequestMapping(value = "/testmodifiedname")
 	public String TestModifiedName(@RequestParam(required = true) long id, @RequestParam(required = true) String newTestName) throws IOException {
-		daoFactory.getTestDao().modifyName(id, newTestName);
+		Test test = daoFactory.getTestDao().find(id);
+		if (test==null) {
+			testNotFound();
+		}
+		else {
+			daoFactory.getTestDao().modifyName(id, newTestName);
+		}
 		return "redirect:/test?id="+id;
 	}
+	
 	@RequestMapping(value = "/testmodifiedstep")
 	public String TestModifiedStep(@RequestParam(required = true) long testId, @RequestParam(required = true) int stepId, @RequestParam(required = true) String newStep) throws IOException {
-		daoFactory.getTestDao().modifyStep(testId, stepId, newStep);
+		Test test = daoFactory.getTestDao().find(testId);
+		Step step = test.getStep(stepId);
+		if (test==null || step==null) {
+			testNotFound();
+		}
+		else {
+			daoFactory.getTestDao().modifyStep(testId, stepId, newStep);
+		}
+		
 		return "redirect:/test?id="+testId;
 	}
 	
