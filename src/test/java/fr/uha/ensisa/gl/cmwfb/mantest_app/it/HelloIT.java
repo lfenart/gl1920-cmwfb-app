@@ -27,34 +27,6 @@ public class HelloIT {
 	public static WebDriver driver;
 	public static String port;
 
-//	@BeforeClass
-//	public static void setupWebDriver() {
-//// Looking for marionette in PATH
-//		String ext = System.getProperty("os.name", "").toLowerCase().startsWith("win") ? ".exe" : "";
-//		String geckodrivername = "geckodriver" + ext;
-//		Collection<String> pathes = new ArrayList<>();
-//		for (String source : new String[] { System.getProperty("PATH") /* posix */,
-//				System.getenv().get("Path") /* win < 10 */, System.getenv().get("PATH") /* win >= 10 */ }) {
-//			if (source != null) {
-//				pathes.addAll(Arrays.asList(source.trim().split(File.pathSeparator)));
-//			}
-//		}
-//		File geckoDriver = null;
-//		for (String path : pathes) {
-//			File f = new File(path, geckodrivername);
-//			if (f.exists() && f.canExecute()) {
-//				System.setProperty("webdriver.gecko.driver", f.getAbsolutePath());
-//				geckoDriver = f;
-//				break;
-//			}
-//		}
-//		if (geckoDriver == null) {
-//			throw new IllegalStateException("Cannot find geckodriver on the PATH");
-//		}
-//		driver = new FirefoxDriver();
-//		port = System.getProperty("servlet.port", "8080");
-//	}
-
 	@BeforeClass
 	public static void setupWebDriver() {
 		try {
@@ -124,40 +96,5 @@ public class HelloIT {
 		driver.get("http://localhost:" + port + "/test?id=1000");
 		assertTrue(driver.getPageSource().contains("not found"));
 	}
-	
-
-	@Mock public DaoFactory daoFactory;
-    @Mock public TestSerieDao daoTaskSerie;
-    @Mock public TestDao daoTask;
-    
-    public TestSerieController sutS;
-    
-    @Before
-    public void prepareDao() {
-            MockitoAnnotations.initMocks(this);
-            when(this.daoFactory.getTestSerieDao()).thenReturn(this.daoTaskSerie);
-            when(this.daoFactory.getTestDao()).thenReturn(this.daoTask);
-            sutS = new TestSerieController();
-            sutS.daoFactory = this.daoFactory;
-    }
-    
-    @Test
-    public void testAddTest() {
-            long dSerieId = 5L;
-            long dTestId = 3L;
-            fr.uha.ensisa.gl.cmwfb.mantest.TestSerie testSerie = mock(fr.uha.ensisa.gl.cmwfb.mantest.TestSerie.class);
-            when(daoTaskSerie.find(dSerieId)).thenReturn(testSerie);
-            
-            fr.uha.ensisa.gl.cmwfb.mantest.Test test = mock(fr.uha.ensisa.gl.cmwfb.mantest.Test.class);
-            when(daoTask.find(dTestId)).thenReturn(test);
-            
-            String ret = this.sutS.addTest(dSerieId, dTestId);
-            assertEquals(ret, "redirect:/viewSerie?id="+dSerieId);
-            
-            verify(this.daoTaskSerie).find(dSerieId);
-            verify(this.daoTask).find(dTestId);
-            verify(testSerie).add(test);
-            verify(this.daoTaskSerie).persist(testSerie);
-    }
 
 }
