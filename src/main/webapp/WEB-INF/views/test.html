@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Test [[${test.name}]] (#[[${test.id}]])</title>
+</head>
+<body>
+	<header>
+		<h1>Test #[[${test.id}]]</h1>
+	</header>
+	<section>
+		<div id="content">
+			<h2>[[${test.name}]]</h2>
+			<div id="tools">
+				<a th:href="${'/delete?id=' + test.id}">Supprimer</a>
+			</div>
+			<div id="tools">
+				<a th:href="${'/modify?id=' + test.id}">Modifier</a>
+			</div>
+			<div id="actions">
+				<h3>Etapes</h3>
+				<ul id="step-list">
+					<li th:each="step: ${test.steps}">[[${step.text}]]</li>
+				</ul>
+				<form action="/addStep" method="GET" accept-charset="UTF-8">
+					<input type="hidden" name="id" th:value="${ test.id }" /> <input
+						type="text" name="stepText"> <input type="submit" value="Creer">
+				</form>
+			</div>
+			<div>
+				<h3>Resultat</h3>
+				<p>[[${test.result}]]</p>
+			</div>
+		</div>
+	</section>
+	<footer> </footer>
+</body>
+</html>

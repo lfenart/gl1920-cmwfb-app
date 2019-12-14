@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Modify Test [[${test.name}]] (#[[${test.id}]])</title>
+</head>
+<body>
+	<header>
+		<h1>Modify Test #[[${test.id}]]</h1>
+	</header>
+	<section>
+		<div id="content">
+
+			<form th:action=" @{/testmodifiedname} " method="POST"
+				accept-charset="UTF-8">
+				<input type="hidden" name="id" th:value="${test.id}"> <input
+					type="text" name="newTestName" th:value="${test.name}"><br>
+				<input type="submit" name="create" value="Modify">
+			</form>
+
+			<div id="actions">
+				<h3>Etapes</h3>
+				<ul id="step-list">
+					<li  th:each="step,stepStat: ${test.steps}" >
+						<form th:action=" @{/testmodifiedstep} " method="POST" accept-charset="UTF-8">
+							<input type="hidden" name="testId" th:value="${test.id}"> 
+							<input type="hidden" name="stepId" th:value="${stepStat.index}"> 
+							<input type="text" name="newStep" th:value="${step.text}"><br>
+							<input type="submit" name="create" value="Modify">
+						</form>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<h3>Resultat</h3>
+				<p>[[${test.result}]]</p>
+			</div>
+		</div>
+	</section>
+	<footer> </footer>
+</body>
+</html>
