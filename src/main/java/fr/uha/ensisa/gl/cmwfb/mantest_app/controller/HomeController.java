@@ -66,7 +66,7 @@ public class HomeController {
 			testNotFound();
 		}
 		else {
-			daoFactory.getTestDao().modifyName(id, newTestName);
+			test.setName(newTestName);
 		}
 		return "redirect:/test?id="+id;
 	}
@@ -79,7 +79,7 @@ public class HomeController {
 			testNotFound();
 		}
 		else {
-			daoFactory.getTestDao().modifyStep(testId, stepId, newStep);
+			step.setText(newStep);
 		}
 		
 		return "redirect:/test?id="+testId;
