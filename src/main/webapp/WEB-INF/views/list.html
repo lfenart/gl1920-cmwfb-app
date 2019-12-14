@@ -1,18 +1,46 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head head th:replace="../fragments/template :: head">
 <title>Tests list</title>
 </head>
 <body>
-	<ul id="tests">
-		<li th:each="test: ${tests}" th:id="${'test_' + test.id }"><a
-			th:href="${'/test?id=' + test.id}">[[${test.name}]]</a> <a
-			th:href="${'/delete?id=' + test.id}">Supprimer</a></li>
-	</ul>
+<br>
+
+<div class="row justify-content-center col-auto">
+	<div class="table-responsive-md">
+	<table class="table table-bordered table-striped w-auto text-center">
+	  <thead class="thead-dark">
+	    <tr>
+	      <th scope="col">#</th>
+	      <th scope="col">Nom du Test</th>
+	      <th scope="col">Nombre d'étapes</th>
+	      <th scope="col">état</th>
+	      <th scope="col">Rapport</th>
+	    </tr>
+	  </thead>
+	  <tbody id="tests">
+	    <tr th:each="test: ${tests}" th:id="${'test_' + test.id }">
+	      <th scope="row" ><a th:href="${'/test?id=' + test.id}">[[${test.id}]]</a></th>
+	      <td>[[${test.name}]]</td>
+	      <td th:text="${#arrays.length(test.steps)}"></td>
+	      <td>[[${test.result}]]</td>
+	      <td></td>
+	    </tr>
+	  </tbody>
+	</table>
+	</div>
+	</div><br>
+	
+	<div style="margin-left:40%">
 	<form th:action=" @{/create} " method="POST" accept-charset="UTF-8">
-		<input type="text" name="testName"><br> <input
-			type="submit" name="create" value="create">
+		<div class="input-group col-xs-4 ">
+			<input id="testName" class="form-control" type="text" name="testName" placeholder="Test Name .." required>
+			<span class="input-group-btn">
+				<button type="submit" name="create" class="btn" >Create</button>
+	 		</span>
+		</div>
 	</form>
+	</div>
+	
 </body>
 </html>
