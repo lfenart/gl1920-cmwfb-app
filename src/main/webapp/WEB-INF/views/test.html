@@ -17,6 +17,17 @@
 			<div id="tools">
 				<a th:href="${'/modify?id=' + test.id}">Modifier</a>
 			</div>
+			<div>
+   				<c:choose>
+				   <c: when test="${not empty testReport}">
+					<a th:href="${'/viewReport?id=' + test.id}">Voir le rapport de test</a>	
+					</c:when> <!-- if condition -->
+				   <c: otherwise>
+				   <a th:href="${'/createReport?id=' + test.id}">Créer un rapport de test</a>
+				   </c:otherwise>    <!-- else condition -->
+				</c:choose>
+				
+			</div>
 			<div id="actions">
 				<h3>Etapes</h3>
 				<ul id="step-list">

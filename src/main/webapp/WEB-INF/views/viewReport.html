@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    <title>Visualisation d'un Rapport de test</title>
+	</head>
+	
+	<body>
+		<h2>Visualisation d'un Rapport de test</h2>
+		<div>
+			<h4>Test concerne  : [[${test.name}]]</h4>
+		</div>
+		<div>
+			<h4>Effectué le : <fmt:formatDate value="${testReport.getCalendar().getTime()}" pattern="dd-MM-yyyy à HH:mm:ss" /> </h4>
+		</div>
+	
+	
+		<table>                                       
+			<tr>
+				<td>Étapes</td>
+				<td>Commentaires</td>
+				<td>Résultats</td>
+			</tr>
+			<tr th:each ="Step : ${Steps}">
+				<td>[[${Step.text}]]</td>
+					<c: if test="${not empty testReport.getStepReport(test.getStepId(Step) }" var="StepReport">
+					<td th:value="${StepReport?.comment}"></td>
+					<td th:value="${StepReport?.success}"></td>
+					</c:if>
+			</tr>
+		</table>
+	<!-- 	<div>
+			<h4>Étape : </h4>
+			<c:th items="${stepsR}" var="stepR">
+				<div>
+					<c:if test="${stepR.isSuccess() eq 'true'}">
+						<h5><div class="pastille succesDIV" id=""></div> </h5>
+					</c:if>
+                	<c:if test="${stepR.isSuccess() eq 'false'}">
+                    	<h5><div class="pastille echecDIV" id=""> </div> </h5>
+                	</c:if>
+					<c:out value="${ stepR.getStep().getDescription() }"/>
+					<br>
+					Commentaire : <c:out value="${ stepR.getCommentaire() }"/>
+				</div> 
+			</c:forEach>
+        -->      
+		</div><br>
+		<div>
+			<c:if test="${testR.isFinished() eq 'false'}">
+				<form action="<spring:url value='/makeReport'/>">
+					<input type = "hidden" name="id" value="<c:out value="${id}"  />">
+					<input type="submit" name="continueReport" value="Poursuivre le test"/>
+				</form>
+			</c:if>
+		</div>
+    	
+		<a th:href="${'/test?id=' + test.id}">Revenir au test</a>
+		<br>
+		<a href="<spring:url value='/'/>">Retour à l'accueil</a>
+	</body>

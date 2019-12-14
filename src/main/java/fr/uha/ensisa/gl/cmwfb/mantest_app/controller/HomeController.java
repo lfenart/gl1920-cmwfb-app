@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import fr.uha.ensisa.gl.cmwfb.mantest.Step;
 import fr.uha.ensisa.gl.cmwfb.mantest.Test;
+import fr.uha.ensisa.gl.cmwfb.mantest.TestReport;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
 
 @Controller
@@ -96,6 +97,8 @@ public class HomeController {
 	@RequestMapping(value = "/test")
 	public ModelAndView test(@RequestParam(required = true) long id) {
 		ModelAndView ret = new ModelAndView("test");
+		TestReport currentReport = daoFactory.getTestReportDao().find(id);
+		ret.addObject("testReport", currentReport);		
 		Test test = daoFactory.getTestDao().find(id);
 		if (test == null) {
 			return testNotFound();
