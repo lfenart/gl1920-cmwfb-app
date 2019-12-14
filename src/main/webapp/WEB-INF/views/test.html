@@ -25,14 +25,6 @@
 							<ul id="step-list">
 								<li th:each="step: ${test.steps}">[[${step.text}]]</li>
 							</ul>
-							<form action="/addStep" method="GET" accept-charset="UTF-8">
-								<div class="form-group">
-									<label for="step">Step Name:</label> 
-									<input id="step" class="form-control" type="text" name="stepText" required>
-								</div>
-								<input type="hidden" name="id" th:value="${ test.id }" /> 
-								<input type="submit" value="Créer" class="btn">
-							</form>
 						</div>
 						<hr>
 						<div>
