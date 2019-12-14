@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head head th:replace="../fragments/template :: head">
 <title>Test [[${test.name}]] (#[[${test.id}]])</title>
 </head>
 <body>
-	<header>
-		<h1>Test #[[${test.id}]]</h1>
-	</header>
 	<section>
 		<div id="content">
-			<h2>[[${test.name}]]</h2>
-			<div id="tools">
-				<a th:href="${'/delete?id=' + test.id}">Supprimer</a>
-			</div>
-			<div id="tools">
-				<a th:href="${'/modify?id=' + test.id}">Modifier</a>
-			</div>
-			<div id="actions">
-				<h3>Etapes</h3>
-				<ul id="step-list">
-					<li th:each="step: ${test.steps}">[[${step.text}]]</li>
-				</ul>
-				<form action="/addStep" method="GET" accept-charset="UTF-8">
-					<input type="hidden" name="id" th:value="${ test.id }" /> <input
-						type="text" name="stepText"> <input type="submit" value="Creer">
-				</form>
-			</div>
-			<div>
-				<h3>Resultat</h3>
-				<p>[[${test.result}]]</p>
-			</div>
-		</div>
+			<div class="container col-sm-6 col-sm-offset-3">
+				<div class="panel panel-primary">
+					<div class="panel-body">
+						<h3 class="text-on-pannel text-primary">
+							<strong class="text-uppercase"> Test #[[${test.id}]] </strong>
+						</h3>
+						<h2>
+							<strong><u> Test name : </u></strong><font style="color:#220fa3">  [[${test.name}]]</font>
+						</h2>
+						<div id="tools">
+							<a class="btn btn-warning" th:href="${'/modify?id=' + test.id}">Modifier</a>
+							<a class="btn btn-danger" th:href="${'/delete?id=' + test.id}">Supprimer</a>
+						</div>
+						<hr>
+						<div id="actions">
+							<h3><strong><u>Etapes</u></strong></h3>
+							<ul id="step-list">
+								<li th:each="step: ${test.steps}">[[${step.text}]]</li>
+							</ul>
+						</div>
+						<hr>
+						<div>
+							<h3><strong><u>Résultat</u></strong></h3>
+							<p>[[${test.result}]]</p>
+						</div>
+					</div>
+				</div>
 	</section>
 	<footer> </footer>
 </body>
