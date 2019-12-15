@@ -7,9 +7,10 @@
 		<link rel="stylesheet" type="text/css" media="all" th:href="@{/resources/style.css}"/>
 	</head>
 	<body>
-		<div th:fragment="header">
+		<div th:fragment="header" id="header">
 			<nav>
-				<a href = "/list">List</a>
+				<a href = "/list"><p>Liste</p></a>
+				<a href = "/creationSerieForm"><p>Nouvelle serie de test<p></a>
 			</nav>
 		</div>
         <div th:fragment="footer">

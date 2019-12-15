@@ -1,0 +1,21 @@
+#header a {
+	text-decoration: none;
+	margin: 3px;
+	padding: 0;
+	background-color: grey;
+	color: white;
+	height: 90%;
+	width: 24%;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#header {
+	background-color: darkblue;
+	height: 60px;
+}
+
+#header nav {
+	height: 100%;
+}
