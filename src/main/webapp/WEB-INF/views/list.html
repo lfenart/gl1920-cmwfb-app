@@ -5,6 +5,7 @@
 <title>Tests list</title>
 </head>
 <body>
+	<div th:replace="../fragments/template :: header"></div>
 	<ul id="tests">
 		<li th:each="test: ${tests}" th:id="${'test_' + test.id }"><a
 			th:href="${'/test?id=' + test.id}">[[${test.name}]]</a> <a

@@ -5,10 +5,9 @@
 <title>Test [[${test.name}]] (#[[${test.id}]])</title>
 </head>
 <body>
-	<header>
-		<h1>Test #[[${test.id}]]</h1>
-	</header>
+	<div th:replace="../fragments/template :: header"></div>
 	<section>
+		<h1>Test #[[${test.id}]]</h1>
 		<div id="content">
 			<h2>[[${test.name}]]</h2>
 			<div id="tools">

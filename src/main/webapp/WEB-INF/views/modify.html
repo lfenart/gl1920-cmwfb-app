@@ -5,10 +5,9 @@
 <title>Modify Test [[${test.name}]] (#[[${test.id}]])</title>
 </head>
 <body>
-	<header>
-		<h1>Modify Test #[[${test.id}]]</h1>
-	</header>
+	<div th:replace="../fragments/template :: header"></div>
 	<section>
+		<h1>Modify Test #[[${test.id}]]</h1>
 		<div id="content">
 
 			<form th:action=" @{/testmodifiedname} " method="POST"
