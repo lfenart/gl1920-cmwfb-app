@@ -16,6 +16,8 @@
 							<strong><u> Test name : </u></strong><font style="color:#220fa3">  [[${test.name}]]</font>
 						</h2>
 						<div id="tools">
+							<a th:if="${testReport!=null}" class="btn btn-primary" th:href="${'/viewReport?id=' + test.id}">Voir le rapport de test</a>	
+					  		<a th:unless="${testReport!=null}" class="btn btn-success" th:href="${'/createReport?id=' + test.id}">Créer un rapport de test</a>
 							<a class="btn btn-warning" th:href="${'/modify?id=' + test.id}">Modifier</a>
 							<a class="btn btn-danger" th:href="${'/delete?id=' + test.id}">Supprimer</a>
 						</div>

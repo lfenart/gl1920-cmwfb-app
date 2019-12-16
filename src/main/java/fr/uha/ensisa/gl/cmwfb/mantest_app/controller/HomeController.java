@@ -1,6 +1,7 @@
 package fr.uha.ensisa.gl.cmwfb.mantest_app.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.uha.ensisa.gl.cmwfb.mantest.Step;
+import fr.uha.ensisa.gl.cmwfb.mantest.StepReport;
 import fr.uha.ensisa.gl.cmwfb.mantest.Test;
+import fr.uha.ensisa.gl.cmwfb.mantest.TestReport;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
 
 @Controller
@@ -53,7 +56,9 @@ public class HomeController {
 		if (test == null) {
 			return testNotFound();
 		} else {
+			TestReport testReport = daoFactory.getTestReportDao().find(test.getId());
 			ret.addObject("test", test);
+			ret.addObject("testReport",testReport);
 			return ret;
 		}
 	}
@@ -89,6 +94,9 @@ public class HomeController {
 		Test test = daoFactory.getTestDao().find(id);
 		if (test != null) {
 			daoFactory.getTestDao().remove(test);
+			TestReport testReport= daoFactory.getTestReportDao().find(id);
+			if (testReport!=null)
+				daoFactory.getTestReportDao().remove(testReport);
 		}
 		return "redirect:/list";
 	}
@@ -96,6 +104,8 @@ public class HomeController {
 	@RequestMapping(value = "/test")
 	public ModelAndView test(@RequestParam(required = true) long id) {
 		ModelAndView ret = new ModelAndView("test");
+		TestReport currentReport = daoFactory.getTestReportDao().find(id);
+		ret.addObject("testReport", currentReport);		
 		Test test = daoFactory.getTestDao().find(id);
 		if (test == null) {
 			return testNotFound();
@@ -107,15 +117,6 @@ public class HomeController {
 
 	private ModelAndView testNotFound() {
 		return new ModelAndView("notest");
-	}
-	
-	@RequestMapping(value = "/addStep")
-	private String addStep(@RequestParam(required = true) long id, @RequestParam(required = true) String stepText) {
-		Test test = daoFactory.getTestDao().find(id);
-		Step step = new Step();
-		step.setText(stepText);
-		test.addStep(step);
-		return "redirect:/test?id=" + id;
 	}
 
 }
