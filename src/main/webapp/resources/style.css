@@ -18,3 +18,12 @@
 .panel-body {
   padding-top: 30px !important;
 }
+.btn-circle {
+    width: 25px;
+    height: 25px;
+    padding: 4px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.07857;
+}

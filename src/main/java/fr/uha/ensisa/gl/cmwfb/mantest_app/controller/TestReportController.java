@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.uha.ensisa.gl.cmwfb.mantest.Step;
+import fr.uha.ensisa.gl.cmwfb.mantest.StepReport;
 import fr.uha.ensisa.gl.cmwfb.mantest.Test;
 import fr.uha.ensisa.gl.cmwfb.mantest.TestReport;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
@@ -20,58 +21,55 @@ public class TestReportController {
 	public DaoFactory daoFactory;
 	
 
-	@RequestMapping(value = "/createReport")
-	public String createReport(@RequestParam(required = true) long id) {
-		Test test = this.daoFactory.getTestDao().find(id);
-		TestReport testReport = this.daoFactory.getTestReportDao().create(test);
-		/*int NumberOfSteps = test.getNumberOfSteps();
-		for(int i=0;i<NumberOfSteps;i++) {
-			testReport.addNextStepStepReport(test.getStepId(test.getSteps().get(i)),testReport.getStepReport(test.getStep(i)).isSuccess() , testReport.getStepReport(test.getStep(i)).getComment());
-		}*/
-		/*if(testReport.getNextStep() != null) {
-		return "redirect:/makeReport?id=" + testReport.getId();	
-		}
-		else {
-			
-		}*/
+	@RequestMapping(value = "/addStep")
+	private String addStep(@RequestParam(required = true) long id, @RequestParam(required = true) String stepText) {
+		Test test = daoFactory.getTestDao().find(id);
+		Step step = new Step();
+		step.setText(stepText);
+		test.addStep(step);
 		return "redirect:/test?id=" + id;
 	}
 	
-/*	@RequestMapping(value = "/makeReport")
-	public ModelAndView makeReportTask(@RequestParam long id) {
-		ModelAndView ret = new ModelAndView("makeReport");
-		TestReport testReport = daoFactory.getTestReportDao().find(id);
-		Test test = testReport.getTest();
-		Step nextStep = testReport.getNextStep();
-		ret.addObject("id", id);
-		ret.addObject("test", test);
-		ret.addObject("nextStep", nextStep);
-		ret.addObject("testReport", testReport);
-		return ret;
+	@RequestMapping(value = "/createReport")
+	public String createReport(@RequestParam(required = true) long id) {
+		Test test = this.daoFactory.getTestDao().find(id);
+		if (test !=null)
+			this.daoFactory.getTestReportDao().create(test);
+		return "redirect:/test?id=" + id;
 	}
-*/	
-	/*@RequestMapping(value = "/createStepReport")
-	public String createStepReport(@RequestParam(required = true) long id, @RequestParam(required = true) boolean valide, @RequestParam(required = true) String commentaire) {
-		TestReport testReport = this.daoFactory.getTestReportDao().find(id);
-		testReport.next(valide, commentaire);
-		if(testReport.getNextStep() != null) {
-			return "redirect:/makeReport?id=" + testReport.getId();	
-		}
-		else{
-			return "redirect:/viewReport?id=" + testReport.getId();	
-		}
-	}*/
 	
 	@RequestMapping(value = "/viewReport")
 	public  ModelAndView reportTask(@RequestParam long id) {
 		TestReport currentReport = daoFactory.getTestReportDao().find(id);
 		Test currentTest = daoFactory.getTestReportDao().find(id).getTest();
 		List<Step> currentSteps = currentTest.getSteps();
+		List<StepReport> stepReports= currentReport.getStepReports();
 		ModelAndView ret = new ModelAndView("viewReport");
 		ret.addObject("test", currentTest);
 		ret.addObject("testReport", currentReport);
 		ret.addObject("Steps",currentSteps);
-		ret.addObject("StepReports", currentReport.getStepReports());
+		ret.addObject("StepReports", stepReports );
 		return ret;
 	}
+
+	@RequestMapping(value = "/addStepReport")
+	private String addStepReport(@RequestParam(required = true) long testId, @RequestParam(required = true) int stepId,
+			@RequestParam(required = true) String comment, @RequestParam(required = true) String result) {
+		TestReport testReport = daoFactory.getTestReportDao().find(testId);
+		testReport.addNextStepStepReport(stepId, result , comment);
+		return "redirect:/test?id=" + testId;
+	}
+	
+	@RequestMapping(value = "/modifyStepReport")
+	private String modifyStepReport(@RequestParam(required = true) long testId, @RequestParam(required = true) int stepId,
+			@RequestParam(required = true) String comment, @RequestParam(required = true) String result) {
+		TestReport testReport = daoFactory.getTestReportDao().find(testId);
+		StepReport stepReport = testReport.getStepReport(stepId);
+		if (stepReport!=null) {
+			stepReport.setComment(comment);
+			stepReport.setResult(result);
+		}		
+		return "redirect:/test?id=" + testId;
+	}
+	
 }
