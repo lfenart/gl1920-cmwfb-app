@@ -25,5 +25,27 @@
     border-radius: 15px;
     text-align: center;
     font-size: 12px;
-    line-height: 1.07857;
+    line-height: 1.07857;   
+}
+    
+#header a {
+	text-decoration: none;
+	margin: 3px;
+	padding: 0;
+	background-color: grey;
+	color: white;
+	height: 90%;
+	width: 24%;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#header {
+	background-color: darkblue;
+	height: 60px;
+}
+
+#header nav {
+	height: 100%;
 }
