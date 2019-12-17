@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Visualisation d'une suite de tests</title>
+</head>
+<body>
+	<h2 style="text-align: center;">Visualisation d'une suite de tests</h2>
+	<hr color="">
+	<h3>Suite de test d'id : [[${id}]]</h3>
+	<h3>Suite de test de nom : [[${name}]]</h3>
+	<table class="table table-bordered table-striped w-auto text-center">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Nom du Test</th>
+				<th scope="col">Nombre d'étapes</th>
+				<th scope="col">état</th>
+				<th scope="col">Rapport</th>
+			</tr>
+		</thead>
+		<tbody id="tests">
+			<tr th:each="test: ${tests}" th:id="${'test_' + test.id }">
+				<th scope="row"><a th:href="${'/test?id=' + test.id}">[[${test.id}]]</a></th>
+				<td>[[${test.name}]]</td>
+				<td th:text="${#arrays.length(test.steps)}"></td>
+				<td>[[${test.result}]]</td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+	<c:forEach items="${testSerie.getTestSerie()}" var="testSerie" />
+	<div>
+		<c:out value="${ testSerie.getName() }" />
+	</div>
+	</c:forEach>
+	<form action="/addTest/">
+		<input type="submit" value="addTest" /> <input type="hidden"
+			name="serieId" th:value="${id}" /> <input type="text" name="testId" />
+	</form>
+	<form action="/viewSerie/">
+		<input type="submit" name="addTestSerie"
+			value="Ajout d'une serie de test" /> <input type="hidden" name="id"
+			value="${testSerie.id}" />
+	</form>
+	<form action="/delete/">
+		<input type="submit" name="delete" value="Supprimer" /> <input
+			type="hidden" name="id" value="${testSerie.id}" />
+	</form>
+</body>
+</html>
