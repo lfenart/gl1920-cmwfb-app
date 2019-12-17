@@ -1,6 +1,7 @@
 package fr.uha.ensisa.gl.cmwfb.mantest_app.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import fr.uha.ensisa.gl.cmwfb.mantest.Step;
 import fr.uha.ensisa.gl.cmwfb.mantest.Test;
+import fr.uha.ensisa.gl.cmwfb.mantest.TestBook;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
 
 @Controller
@@ -26,6 +28,15 @@ public class HomeController {
 		return ret;
 	}
 
+
+	@RequestMapping(value = "/books")
+	public ModelAndView books() {
+		ModelAndView ret = new ModelAndView("books");
+		// Adds an objet to be used in home.jsp
+		ret.addObject("testBooks", daoFactory.getTestBookDao().findAll());
+		return ret;
+	}
+	
 	@RequestMapping(value = "/list")
 	public ModelAndView list() throws IOException {
 		ModelAndView ret = new ModelAndView("list");
@@ -33,8 +44,20 @@ public class HomeController {
 		return ret;
 	}
 
+	@RequestMapping(value = "/createBook")
+	public String createBook(@RequestParam(required = true) String testBookName) throws IOException {
+		TestBook newTestBook = new TestBook();
+		long id = daoFactory.getTestBookDao().count() + 1;
+		while (daoFactory.getTestBookDao().find(id) != null)
+			id++;
+		newTestBook.setId(id);
+		newTestBook.setName(testBookName);
+		daoFactory.getTestBookDao().persist(newTestBook);
+		return "redirect:/books";
+	}
+	
 	@RequestMapping(value = "/create")
-	public String create(@RequestParam(required = true) String testName) throws IOException {
+	public String create(@RequestParam(required = false) Long testBookId, @RequestParam(required = true) String testName) throws IOException {
 		Test newTest = new Test();
 		long id = daoFactory.getTestDao().count() + 1;
 		while (daoFactory.getTestDao().find(id) != null)
@@ -42,7 +65,23 @@ public class HomeController {
 		newTest.setId(id);
 		newTest.setName(testName);
 		daoFactory.getTestDao().persist(newTest);
-		return "redirect:/list";
+		if (testBookId != null) {
+			TestBook testBook = daoFactory.getTestBookDao().find(testBookId);
+			testBook.add(newTest);
+			return "redirect:/book?testBookId="+testBookId;
+		} else {
+			return "redirect:/list";
+		}
+	}
+	
+	@RequestMapping(value = "/book")
+	public ModelAndView book(@RequestParam(required = true) long testBookId) throws IOException {
+		ModelAndView ret = new ModelAndView("book");
+		ret.addObject("testBook", daoFactory.getTestBookDao().find(testBookId));
+		ret.addObject("tests", daoFactory.getTestBookDao().find(testBookId).getTests());
+		ret.addObject("state", daoFactory.getTestBookDao().find(testBookId).getState());
+
+		return ret;
 	}
 	
 	
@@ -94,9 +133,9 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/test")
-	public ModelAndView test(@RequestParam(required = true) long id) {
+	public ModelAndView test(@RequestParam(required = false) Long testBookId, @RequestParam(required = true) long testId) {
 		ModelAndView ret = new ModelAndView("test");
-		Test test = daoFactory.getTestDao().find(id);
+		Test test = daoFactory.getTestDao().find(testId);
 		if (test == null) {
 			return testNotFound();
 		} else {
