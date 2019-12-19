@@ -20,14 +20,6 @@ public class TestController {
 	public DaoFactory daoFactory;
 
 
-	@RequestMapping(value = "/hello")
-	public ModelAndView hello(@RequestParam(required = false, defaultValue = "World") String name) {
-		ModelAndView ret = new ModelAndView("home");
-		// Adds an objet to be used in home.jsp
-		ret.addObject("name", name);
-		return ret;
-	}
-
 	@RequestMapping(value = "/list")
 	public ModelAndView list() throws IOException {
 		ModelAndView ret = new ModelAndView("list");

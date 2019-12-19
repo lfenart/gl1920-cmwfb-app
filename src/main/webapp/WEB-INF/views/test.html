@@ -2,12 +2,10 @@
 <html>
 <head head th:replace="../fragments/template :: head">
 <title>Test [[${test.name}]] (#[[${test.id}]])</title>
-<link rel="stylesheet" type="text/css" href="../../resources/style.css">
 </head>
 <body>
-	<div th:replace="../fragments/template :: header"></div>
+<div th:replace="../fragments/template :: header"></div>
 	<section>
-		<h1>Test #[[${test.id}]]</h1>
 		<div id="content">
 			<div class="container col-sm-6 col-sm-offset-3">
 				<div class="panel panel-primary">
@@ -16,8 +14,7 @@
 							<strong class="text-uppercase"> Test #[[${test.id}]] </strong>
 						</h3>
 						<h2>
-							<strong><u> Test name : </u></strong><font style="color: #220fa3">
-								[[${test.name}]]</font>
+							<strong><u> Test name : </u></strong><font style="color:#220fa3">  [[${test.name}]]</font>
 						</h2>
 						<div id="tools">							
 					  		<a th:if="${test.getNumberOfSteps()!=0}" class="btn btn-success" th:href="${'/createReport?id=' + test.id}">Run <i class="fa fa-chevron-circle-right"></i></a>
@@ -42,10 +39,6 @@
 						</div>
 						<hr>
 						<div>
-							<h3>
-								<strong><u>Résultat</u></strong>
-							</h3>
-							<p>[[${test.result}]]</p>
 							<h3><strong><u>Résultat</u></strong></h3>
 							<p>
 							<h3 th:if="${testReport?.isSuccess()}" style="color:green"> Validé  <i class="fa fa-check-circle"></i></h3>
