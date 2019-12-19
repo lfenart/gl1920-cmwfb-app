@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.junit.Before;
@@ -18,9 +19,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.uha.ensisa.gl.cmwfb.mantest.Step;
+import fr.uha.ensisa.gl.cmwfb.mantest.TestSerie;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestReportDao;
+import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestSerieDao;
 import fr.uha.ensisa.gl.cmwfb.mantest_app.controller.TestController;
 
 public class TestControllerTest {
@@ -31,6 +34,8 @@ public class TestControllerTest {
 	@Mock
 	public TestReportDao daoTestReport;
 	public TestController sut;
+	@Mock
+	private TestSerieDao daoTestSerie;
 
 	@Before
 	public void prepareDao() {
@@ -39,6 +44,7 @@ public class TestControllerTest {
 		sut = new TestController(); // System Under Test
 		sut.daoFactory = this.daoFactory;
 		when(daoFactory.getTestReportDao()).thenReturn(this.daoTestReport);
+		when(daoFactory.getTestSerieDao()).thenReturn(this.daoTestSerie);
 	}
 
 	@Test
@@ -103,6 +109,7 @@ public class TestControllerTest {
 		daoTask.persist(test);
 		when(daoTask.count()).thenReturn(0L, 1L);
 		when(daoTask.find(1)).thenReturn(test);
+		when(daoTestSerie.findAll()).thenReturn(new ArrayList<TestSerie>());
 		sut.delete(1L);
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).remove(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
