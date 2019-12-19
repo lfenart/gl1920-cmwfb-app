@@ -7,41 +7,41 @@
 <body>
 	<div th:replace="../fragments/template :: header"></div>
 	<br>
-
-	<div class="row justify-content-center col-auto">
-		<div class="table-responsive-md">
-			<table class="table table-bordered table-striped w-auto text-center">
-				<thead class="thead-dark">
-					<tr>
-						<th scope="col">#</th>
-						<th scope="col">Nom du Test</th>
-						<th scope="col">Nombre d'étapes</th>
-						<th scope="col">état</th>
-						<th scope="col">Rapport</th>
-					</tr>
-				</thead>
-				<tbody id="tests">
-					<tr th:each="test: ${tests}" th:id="${'test_' + test.id }">
-						<th scope="row"><a th:href="${'/test?id=' + test.id}">[[${test.id}]]</a></th>
-						<td>[[${test.name}]]</td>
-						<td th:text="${#arrays.length(test.steps)}"></td>
-						<td>[[${test.result}]]</td>
-						<td></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+<div class="row justify-content-center col-auto">
+	<div class="table-responsive-md">
+	<table class="table table-bordered table-striped w-auto text-center">
+	  <thead class="thead-dark">
+	    <tr>
+	      <th scope="col">#</th>
+	      <th scope="col">Nom du Test</th>
+	      <th scope="col">Nombre d'étapes</th>
+	      <th scope="col">état</th>
+	      <th scope="col">Rapport</th>
+	    </tr>
+	  </thead>
+	  <tbody id="tests">
+	    <tr th:each="test: ${tests}" th:id="${'test_' + test.id }">
+	      <th scope="row" ><a th:href="${'/test?id=' + test.id}">[[${test.id}]]</a></th>
+	      <td>[[${test.name}]]</td>
+	      <td th:text="${#arrays.length(test.steps)}"></td>
+	      <td>
+	      	<div th:if="${testReports?.get(test.id)?.isSuccess()}" style="color:green"><i class="fa fa-check-circle"></i></div>
+	      	<div th:if="${testReports?.get(test.id)?.isSuccess() == false}" style="color:red"><i class="fa fa-times-circle"></i></div>
+	      </td>
+	      <td><a class="btn btn-info btn-xs" th:href="${'/viewReport?id=' + test.id}" th:if="${testReports?.get(test.id) !=null}">Voir</a></td>
+	    </tr>
+	  </tbody>
+	</table>
 	</div>
-	<br>
-
-	<div style="margin-left: 40%">
-		<form th:action=" @{/create} " method="POST" accept-charset="UTF-8">
-			<div class="input-group col-xs-4 ">
-				<input id="testName" class="form-control" type="text"
-					name="testName" placeholder="Test Name .." required> <span
-					class="input-group-btn">
-					<button type="submit" name="create" class="btn">Create</button>
-				</span>
+	</div><br>
+	
+	<div style="margin-left:40%">
+	<form th:action=" @{/create} " method="POST" accept-charset="UTF-8">
+		<div class="input-group col-xs-4 ">
+			<input id="testName" class="form-control" type="text" name="testName" placeholder="Test Name .." required>
+			<span class="input-group-btn">
+				<button type="submit" name="create" class="btn" >Create</button>
+	 		</span>
 			</div>
 		</form>
 	</div>

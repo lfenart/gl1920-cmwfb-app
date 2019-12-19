@@ -19,22 +19,25 @@
 							<strong><u> Test name : </u></strong><font style="color: #220fa3">
 								[[${test.name}]]</font>
 						</h2>
-						<div id="tools">
-							<a th:if="${testReport!=null}" class="btn btn-primary"
-								th:href="${'/viewReport?id=' + test.id}">Voir le rapport de
-								test</a> <a th:unless="${testReport!=null}" class="btn btn-success"
-								th:href="${'/createReport?id=' + test.id}">Créer un rapport
-								de test</a> <a class="btn btn-warning"
-								th:href="${'/modify?id=' + test.id}">Modifier</a> <a
-								class="btn btn-danger" th:href="${'/delete?id=' + test.id}">Supprimer</a>
+						<div id="tools">							
+					  		<a th:if="${test.getNumberOfSteps()!=0}" class="btn btn-success" th:href="${'/createReport?id=' + test.id}">Run <i class="fa fa-chevron-circle-right"></i></a>
+							<a class="btn btn-warning" th:href="${'/modify?id=' + test.id}">Modifier</a>
+							<a class="btn btn-danger" th:href="${'/delete?id=' + test.id}">Supprimer</a>
 						</div>
 						<hr>
-						<div id="steps">
-							<h3>
-								<strong><u>Etapes</u></strong>
-							</h3>
-							<ul id="step-list">
-								<li th:each="step: ${test.steps}">[[${step.text}]]</li>
+						<div id="actions">
+							<h3><strong><u>Etapes</u></strong></h3>
+							<ul class="d-block" id="step-list" th:each="step, stepStat: ${test.steps}">
+								<button type="button" class="btn btn-primary btn-circle" data-toggle="collapse" 
+									th:data-target="'#collapse'+${stepStat.index}" aria-expanded="false" th:aria-controls="'collapse'+${stepStat.index}">
+									<i class="fa fa-list"></i>
+								</button>
+								[[${step.name}]]
+								<div class="collapse" th:id="'collapse'+${stepStat.index}">
+									<div class="card card-body">
+										<p name="text">[[${step?.text}]]</textarea>
+									</div>
+								</div>
 							</ul>
 						</div>
 						<hr>
@@ -43,6 +46,11 @@
 								<strong><u>Résultat</u></strong>
 							</h3>
 							<p>[[${test.result}]]</p>
+							<h3><strong><u>Résultat</u></strong></h3>
+							<p>
+							<h3 th:if="${testReport?.isSuccess()}" style="color:green"> Validé  <i class="fa fa-check-circle"></i></h3>
+							<h3 th:if="${testReport?.isSuccess() == false}" style="color:red"> Echoué <i class="fa fa-times-circle"></i></h3>
+							</p>
 						</div>
 					</div>
 				</div>
