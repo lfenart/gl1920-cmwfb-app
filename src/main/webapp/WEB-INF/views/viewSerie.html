@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Visualisation d'une suite de tests</title>
+</head>
+<body>
+	<h2 style="text-align: center;">Visualisation d'une suite de tests</h2>
+	<hr color="">
+	<h3>Suite de test d'id : [[${id}]]</h3>
+	<h3>Suite de test de nom : [[${name}]]</h3>
+	<table class="table table-bordered table-striped w-auto text-center">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Nom du Test</th>
+				<th scope="col">Nombre d'etapes</th>
+				<th scope="col">etat</th>
+				<th scope="col">Rapport</th>
+			</tr>
+		</thead>
+		<tbody id="tests">
+			<tr th:each="test: ${tests}" th:id="${'test_' + test.id }">
+				<th scope="row"><a th:href="${'/test?id=' + test.id}">[[${test.id}]]</a></th>
+				<td>[[${test.name}]]</td>
+				<td th:text="${#arrays.length(test.steps)}"></td>
+				<td>[[${test.result}]]</td>
+				<td><a th:href="${'/removeTest/?serieId=' + id + '&testId=' + test.id}">Supprimer</a></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="table table-bordered table-striped w-auto text-center">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Nom de la suite de Test</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody id="testSeries">
+			<tr th:each="testSerie: ${series}" th:id="${'testSerie_' + testSerie.id }">
+				<th scope="row"><a th:href="${'/testSerie?id=' + testSerie.id}">[[${testSerie.id}]]</a></th>
+				<td>[[${testSerie.name}]]</td>
+				<td><a th:href="${'/removeTestSerie/?serieId=' + id + '&testSerieId=' + testSerie.id}">Supprimer</a></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+	<form action="/addTest/">
+		<input type="submit" value="addTest" /> 
+		<input type="hidden" name="serieId" th:value="${id}" />
+		<input type="text" name="testId" />
+	</form>
+	<form action="/addTestSerie/">
+		<input type="submit" value="addTestSerie" />
+		<input type="hidden" name="serieId" th:value="${id}" />
+		<input type="text" name="testSerieId" />
+	</form>
+	<form action="/deleteSerie/">
+		<input type="submit" value="deleteSerie" /> 
+		<input type="hidden" name="id" th:value="${id}" />
+	</form>
+</body>
+</html>
