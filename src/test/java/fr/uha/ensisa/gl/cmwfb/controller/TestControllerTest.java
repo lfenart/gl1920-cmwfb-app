@@ -75,10 +75,11 @@ public class TestControllerTest {
 		daoTask.persist(test);
 		when(daoTask.find(1)).thenReturn(test);
 		when(test.getStep(0)).thenReturn(step);
-		sut.TestModifiedStep(1, 0, "step","");
+		sut.TestModifiedStep(1, 0, "stepname","steptext");
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).find(1);
-		verify(step).setText("step");
+		verify(step).setName("stepname");
+		verify(step).setText("steptext");
 	}
 
 	@Test

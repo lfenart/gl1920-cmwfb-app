@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import fr.uha.ensisa.gl.cmwfb.mantest.Step;
 import fr.uha.ensisa.gl.cmwfb.mantest.Test;
 import fr.uha.ensisa.gl.cmwfb.mantest.TestReport;
+import fr.uha.ensisa.gl.cmwfb.mantest.TestSerie;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
 
 @Controller
@@ -110,6 +111,9 @@ public class TestController {
 		Test test = daoFactory.getTestDao().find(id);
 		if (test != null) {
 			daoFactory.getTestDao().remove(test);
+			for (TestSerie serie : daoFactory.getTestSerieDao().findAll()) {
+				serie.remove(test);
+			}
 			TestReport testReport= daoFactory.getTestReportDao().find(id);
 			if (testReport!=null)
 				daoFactory.getTestReportDao().remove(testReport);
