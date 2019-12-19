@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import fr.uha.ensisa.gl.cmwfb.mantest.Step;
 import fr.uha.ensisa.gl.cmwfb.mantest.Test;
+import fr.uha.ensisa.gl.cmwfb.mantest.TestBook;
 import fr.uha.ensisa.gl.cmwfb.mantest.TestReport;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
 
@@ -21,8 +22,9 @@ public class TestController {
 
 
 	@RequestMapping(value = "/list")
-	public ModelAndView list() throws IOException {
+	public ModelAndView list(/*@RequestParam(required = true) long testBookId*/) throws IOException {
 		ModelAndView ret = new ModelAndView("list");
+		//ret.addObject("testBook", daoFactory.getTestBookDao().find(testBookId));
 		ret.addObject("tests", daoFactory.getTestDao().findAll());
 		ret.addObject("testReports",daoFactory.getTestReportDao().findAll());
 		return ret;
@@ -135,5 +137,5 @@ public class TestController {
 	private ModelAndView testNotFound() {
 		return new ModelAndView("notest");
 	}
-
+	
 }

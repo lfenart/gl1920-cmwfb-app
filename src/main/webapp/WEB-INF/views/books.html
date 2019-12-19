@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Test books</title>
+</head>
+<h1> Test books</h1>
+
+<body>
+
+<ul id="tests">
+		<li th:each="testBook: ${testBooks}" > 
+		<a  th:href="${'/list?testBookId='+ testBook.id}"> 
+		[[${testBook.name}]]
+		</a> 
+	
+		</li>
+	</ul>
+	
+	
+<form action="/createBook/">
+
+		<input type="text" name="testBookName"><br> <input
+			type="submit" name="newTestBook" value="new testBook"> <br>
+
+	</form>
+	
+
+</body>
+</html>
