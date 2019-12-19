@@ -19,10 +19,12 @@ public class TestController {
 	@Autowired
 	public DaoFactory daoFactory;
 
+
 	@RequestMapping(value = "/list")
 	public ModelAndView list() throws IOException {
 		ModelAndView ret = new ModelAndView("list");
 		ret.addObject("tests", daoFactory.getTestDao().findAll());
+		ret.addObject("testReports",daoFactory.getTestReportDao().findAll());
 		return ret;
 	}
 
@@ -45,12 +47,20 @@ public class TestController {
 		Test test = daoFactory.getTestDao().find(id);
 		if (test == null) {
 			return testNotFound();
-		} else {
-			TestReport testReport = daoFactory.getTestReportDao().find(test.getId());
+		} else {			
 			ret.addObject("test", test);
-			ret.addObject("testReport",testReport);
 			return ret;
 		}
+	}
+	
+	@RequestMapping(value = "/addStep")
+	private String addStep(@RequestParam(required = true) long id, @RequestParam(required = true) String stepName,@RequestParam String text) {
+		Test test = daoFactory.getTestDao().find(id);
+		Step step = new Step();
+		step.setName(stepName);
+		step.setText(text);
+		test.addStep(step);
+		return "redirect:/modify?id=" + id;
 	}
 	
 	@RequestMapping(value = "/testmodifiedname")
@@ -62,21 +72,37 @@ public class TestController {
 		else {
 			test.setName(newTestName);
 		}
-		return "redirect:/test?id="+id;
+		return "redirect:/modify?id="+id;
 	}
 	
 	@RequestMapping(value = "/testmodifiedstep")
-	public String TestModifiedStep(@RequestParam(required = true) long testId, @RequestParam(required = true) int stepId, @RequestParam(required = true) String newStep) throws IOException {
+	public String TestModifiedStep(@RequestParam(required = true) long testId, @RequestParam(required = true) int stepId,
+			@RequestParam(required = true) String newStepName, @RequestParam String text) throws IOException {
 		Test test = daoFactory.getTestDao().find(testId);
 		Step step = test.getStep(stepId);
 		if (test==null || step==null) {
 			testNotFound();
 		}
 		else {
-			step.setText(newStep);
+			step.setName(newStepName);
+			step.setText(text);
 		}
 		
-		return "redirect:/test?id="+testId;
+		return "redirect:/modify?id="+testId;
+	}
+	
+	@RequestMapping(value = "/testDeleteStep")
+	public String testDeleteStep(@RequestParam(required = true) long testId, @RequestParam(required = true) int stepId) {
+		Test test = daoFactory.getTestDao().find(testId);
+		Step step = test.getStep(stepId);
+		if (test==null || step==null) {
+			testNotFound();
+		}
+		else {
+			test.removeStep(stepId);
+		}
+		
+		return "redirect:/modify?id="+testId;
 	}
 	
 	@RequestMapping(value = "/delete")
@@ -104,6 +130,7 @@ public class TestController {
 			return ret;
 		}
 	}
+	
 
 	private ModelAndView testNotFound() {
 		return new ModelAndView("notest");

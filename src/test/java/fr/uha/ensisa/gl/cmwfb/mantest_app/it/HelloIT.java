@@ -72,14 +72,6 @@ public class HelloIT {
 	}
 
 	@Test
-	public void testName() {
-		String testName = "testname";
-		driver.get("http://localhost:" + port + "/hello?name=" + testName);
-		assertTrue("Sent name not found in page", driver.getPageSource().contains(testName));
-	}
-	
-
-	@Test
 	public void testConnection() throws Exception {
 		URL url = new URL("http://localhost:" + port + "/test?id=1");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

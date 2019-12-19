@@ -4,9 +4,8 @@
 <title>Modifier Test [[${test.name}]] (#[[${test.id}]])</title>
 </head>
 <body>
-	<div th:replace="../fragments/template :: header"></div>
+<div th:replace="../fragments/template :: header"></div>
 	<section>
-		<h1>Modify Test #[[${test.id}]]</h1>
 		<div id="content">
 			<div class="container col-sm-6 col-sm-offset-3">
 				<div class="panel panel-primary">
@@ -14,102 +13,78 @@
 						<h3 class="text-on-pannel text-primary">
 							<strong class="text-uppercase"> Test #[[${test.id}]] </strong>
 						</h3>
-						<form th:action=" @{/testmodifiedname} " method="POST"
-							accept-charset="UTF-8">
+						<form th:action=" @{/testmodifiedname} " method="POST" accept-charset="UTF-8">
 							<h2>
-								<strong><u> Test name : </u></strong>
+								<strong><u> Nom du test <a th:href="${'/test?id=' + test.id}">#[[${test.id}]]</a> : </u></strong>
 							</h2>
-							<input type="hidden" name="id" th:value="${test.id}"> <input
-								type="text" name="newTestName" th:value="${test.name}"
-								style="color: #220fa3"> <input type="submit"
-								name="Modify" value="Modifier" class="btn btn-warning btn-sm">
+							<input type="hidden" name="id" th:value="${test.id}"> 	
+							<input type="text" name="newTestName" th:value="${test.name}" style="color:#220fa3">
+							<input type="submit" name="Modify" value="Modifier" class="btn btn-warning btn-sm">
 						</form>
-
+						
 						<hr>
 						<div id="actions">
-							<h3>
-								<strong><u>Etapes</u></strong>
-							</h3>
+							<h3><strong><u>Etapes</u></strong></h3>
 							<div id="step-list">
-								<ul class="d-block" th:each="step,stepStat: ${test.steps}">
-									<form th:action=" @{/testmodifiedstep} " method="POST"
-										accept-charset="UTF-8">
-										<button th:if="${testReport!=null}" type="button"
-											class="btn btn-primary btn-circle" data-toggle="collapse"
-											th:data-target="'#collapse'+${stepStat.index}"
-											aria-expanded="false"
-											th:aria-controls="'collapse'+${stepStat.index}">
+							<ul class="d-block"  th:each="step,stepStat: ${test.steps}" >
+							<table>
+							<tr><td style="vertical-align:top">
+								
+								<form th:action=" @{/testmodifiedstep} " method="POST" accept-charset="UTF-8">
+									<button type="button" class="btn btn-primary btn-circle" data-toggle="collapse" 
+											th:data-target="'#collapse'+${stepStat.index}" aria-expanded="false" th:aria-controls="'collapse'+${stepStat.index}">
 											<i class="fa fa-list"></i>
-										</button>
-
-										<input type="hidden" name="testId" th:value="${test.id}">
-										<input type="hidden" name="stepId"
-											th:value="${stepStat.index}"> <input type="text"
-											name="newStep" th:value="${step.text}"> <input
-											type="submit" name="Modify" value="Modifier"
-											class="btn btn-warning btn-xs">
-									</form>
-
-									<div
-										th:with="stepReport=${testReport?.getStepReport(stepStat.index)}"
-										class="collapse" th:id="'collapse'+${stepStat.index}">
+									</button> 
+										<input type="hidden" name="testId" th:value="${test.id}"> 
+										<input type="hidden" name="stepId" th:value="${stepStat.index}"> 
+										<input type="text"  style="width:50%" name="newStepName" th:value="${step.name}">
+										<input type="submit" name="Modify" value="Modifier" class="btn btn-warning btn-xs">
+										
+									<div class="collapse" th:id="'collapse'+${stepStat.index}">
 										<div class="card card-body">
-											<form
-												th:action=" ${stepReport !=null } ? @{/modifyStepReport} : @{/addStepReport} "
-												method="POST" accept-charset="UTF-8">
-												<input type="hidden" name="testId" th:value="${test.id}">
-												<input type="hidden" name="stepId"
-													th:value="${stepStat.index}">
-												<textarea class="col-md-12" rows="2" name="comment"
-													placeholder="Commentaire ...">[[${stepReport?.comment}]]</textarea>
-												<div class="input-group">
-													<div class="form-group col-md-10">
-														<label for="result">Etat</label> <select
-															class="form-control" name="result" id="result">
-															<option value="Nouveau"
-																th:selected="${stepReport !=null } ? ${stepReport.result} == 'Nouveau' ">Nouveau</option>
-															<option value="En cours"
-																th:selected="${stepReport !=null } ? ${stepReport.result} == 'En cours' ">En
-																cours</option>
-															<option value="Rï¿½ussi"
-																th:selected="${stepReport !=null } ? ${stepReport.result} == 'Rï¿½ussi' ">Rï¿½ussi</option>
-															<option value="Echouï¿½"
-																th:selected="${stepReport !=null } ? ${stepReport.result} == 'Echouï¿½' ">Echouï¿½</option>
-														</select>
-													</div>
-													<span class="input-group-btn"> <input type="submit"
-														th:name="${stepReport !=null } ? 'Modifier' : 'Create'"
-														th:value="${stepReport !=null } ? 'Modifier' : 'Create'"
-														class="btn ">
-													</span>
-												</div>
-											</form>
+											<textarea class="col-md-12" rows="2" name="text" placeholder="Description ...">[[${step?.text}]]</textarea>
 										</div>
 									</div>
-
-								</ul>
-
+								</form>
+								</td>
+								<td style="vertical-align:top">
+								<form th:action=" @{/testDeleteStep} " method="POST" accept-charset="UTF-8">
+									<input type="hidden" name="testId" th:value="${test.id}"> 
+									<input type="hidden" name="stepId" th:value="${stepStat.index}"> 
+									<input type="submit" name="Supprimer" value="Supprimer" class="btn btn-danger btn-xs">
+								</form>
+								</td>
+								</tr></table>
+							</ul>
+								 
 							</div>
+							
+							<hr>
 							<form action="/addStep" method="GET" accept-charset="UTF-8">
 								<div class="form-group">
-									<label for="step">Step Name:</label> <input id="step"
-										class="form-control" type="text" name="stepText" required>
+									<label for="step">Nom de l'étape :</label> 
+									<input id="step" class="form-control" type="text" name="stepName" required>
 								</div>
-								<input type="hidden" name="id" th:value="${ test.id }" /> <input
-									type="submit" value="Crï¿½er" class="btn">
+								<div>
+									<label>Description :</label>
+									<textarea class="col-md-12" rows="2" name="text" placeholder="Description ..."></textarea>
+								</div>
+								<input type="hidden" name="id" th:value="${ test.id }" /> 
+								<div style="text-align: center">
+									<input type="submit" value="Créer" class="btn btn-success">
+								</div>
+								
 							</form>
 						</div>
-						<hr>
-						<div>
-							<h3>
-								<strong><u>Resultat</u></strong>
-							</h3>
-							<p>[[${test.result}]]</p>
+						<br><br>
+						<div style="text-align: center">
+						<a  th:href="${'/test?id=' + test.id}">Revenir au test</a>
 						</div>
+						
 					</div>
 				</div>
 	</section>
-
+	
 	<footer> </footer>
 </body>
 </html>
