@@ -35,11 +35,29 @@ public class TestSerieController {
             this.daoFactory.getTestSerieDao().persist(testSerie);
             return "redirect:/viewSerie?id=" + serieId;
     }
+    @RequestMapping(value = "/removeTest")
+    public String removeTest(@RequestParam(required = true) long serieId, @RequestParam(required = true) long testId){
+    		Test test = this.daoFactory.getTestDao().find(testId);
+            TestSerie testSerie = this.daoFactory.getTestSerieDao().find(serieId);
+            testSerie.remove(test);
+            this.daoFactory.getTestSerieDao().persist(testSerie);
+            return "redirect:/viewSerie?id=" + serieId;
+    }
+    
+    
     @RequestMapping(value = "/addTestSerie")
     public String addTestSerie(@RequestParam(required = true) long serieId, @RequestParam(required = true) long testSerieId){
     		TestSerie test = this.daoFactory.getTestSerieDao().find(testSerieId);
             TestSerie testSerie = this.daoFactory.getTestSerieDao().find(serieId);
             testSerie.add(test);
+            this.daoFactory.getTestSerieDao().persist(testSerie);
+            return "redirect:/viewSerie?id=" + serieId;
+    }
+    @RequestMapping(value = "/removeTestSerie")
+    public String removeTestSerie(@RequestParam(required = true) long serieId, @RequestParam(required = true) long testSerieId){
+    		TestSerie test = this.daoFactory.getTestSerieDao().find(testSerieId);
+            TestSerie testSerie = this.daoFactory.getTestSerieDao().find(serieId);
+            testSerie.removeSerie(test);
             this.daoFactory.getTestSerieDao().persist(testSerie);
             return "redirect:/viewSerie?id=" + serieId;
     }
@@ -53,16 +71,16 @@ public class TestSerieController {
 		ret.addObject("tests", current);
 		ret.addObject("id",id);
 		ret.addObject("name", currentSerie.getName());
-		ret.addObject("serie", currentSerie.getTestSeries());
+		ret.addObject("series", currentSerie.getTestSeries());
 		return ret;
 	}
 	
-	@RequestMapping(value = "/delete")
-	public String delete(@RequestParam(required = true) long id) {
+	@RequestMapping(value = "/deleteSerie")
+	public String deleteSerie(@RequestParam(required = true) long id) {
 		TestSerie test = daoFactory.getTestSerieDao().find(id);
 		if (test != null) {
-			daoFactory.getTestSerieDao().delete(test);
+			daoFactory.getTestSerieDao().deleteSerie(test);
 		}
-		return "redirect:/viewSerie";
+		return "redirect:/list";
 	}
 }
