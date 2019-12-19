@@ -1,5 +1,7 @@
 package fr.uha.ensisa.gl.cmwfb.mantest_app.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,31 +22,59 @@ public class TestReportController {
 	@Autowired
 	public DaoFactory daoFactory;
 	
-
-	@RequestMapping(value = "/addStep")
-	private String addStep(@RequestParam(required = true) long id, @RequestParam(required = true) String stepText) {
-		Test test = daoFactory.getTestDao().find(id);
-		Step step = new Step();
-		step.setText(stepText);
-		test.addStep(step);
-		return "redirect:/test?id=" + id;
-	}
-	
 	@RequestMapping(value = "/createReport")
 	public String createReport(@RequestParam(required = true) long id) {
 		Test test = this.daoFactory.getTestDao().find(id);
-		if (test !=null)
-			this.daoFactory.getTestReportDao().create(test);
+		if (test !=null) {
+			TestReport testReport = this.daoFactory.getTestReportDao().create(test);
+			
+			if(testReport.getNextStep() != null) {
+				return "redirect:/makeReport?id=" + testReport.getId();	
+				}
+				else {
+					return "redirect:/test?id=" + id;
+				}
+		}
 		return "redirect:/test?id=" + id;
+	}
+		
+	@RequestMapping(value = "/makeReport")
+	public ModelAndView makeReportTask(@RequestParam long id) {
+		ModelAndView ret = new ModelAndView("makeReport");
+		TestReport testReport = daoFactory.getTestReportDao().find(id);
+		Test test = testReport.getTest();
+		Step nextStep = testReport.getNextStep();
+		ret.addObject("id", id);
+		ret.addObject("test", test);
+		ret.addObject("nextStep", nextStep);
+		ret.addObject("testReport", testReport);
+		return ret;
+	}
+	
+	@RequestMapping(value = "/addStepReport")
+	private String addStepReport(@RequestParam(required = true) long id,
+			@RequestParam(required = true) String comment, @RequestParam(required = true) boolean success) {
+		TestReport testReport = daoFactory.getTestReportDao().find(id);
+		testReport.next(success, comment);
+		if(testReport.getNextStep() != null) {
+			return "redirect:/makeReport?id=" + testReport.getId();	
+		}
+		else{
+			return "redirect:/viewReport?id=" + testReport.getId();	
+		}
 	}
 	
 	@RequestMapping(value = "/viewReport")
 	public  ModelAndView reportTask(@RequestParam long id) {
 		TestReport currentReport = daoFactory.getTestReportDao().find(id);
-		Test currentTest = daoFactory.getTestReportDao().find(id).getTest();
+		Test currentTest = currentReport.getTest();
 		List<Step> currentSteps = currentTest.getSteps();
 		List<StepReport> stepReports= currentReport.getStepReports();
 		ModelAndView ret = new ModelAndView("viewReport");
+		Calendar c = currentReport.getCalendar();
+		SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy à hh:mm:ss aa");  
+	    String datetime = dateformat.format(c.getTime());
+	    ret.addObject("dateTime", datetime);
 		ret.addObject("test", currentTest);
 		ret.addObject("testReport", currentReport);
 		ret.addObject("Steps",currentSteps);
@@ -52,24 +82,8 @@ public class TestReportController {
 		return ret;
 	}
 
-	@RequestMapping(value = "/addStepReport")
-	private String addStepReport(@RequestParam(required = true) long testId, @RequestParam(required = true) int stepId,
-			@RequestParam(required = true) String comment, @RequestParam(required = true) String result) {
-		TestReport testReport = daoFactory.getTestReportDao().find(testId);
-		testReport.addNextStepStepReport(stepId, result , comment);
-		return "redirect:/test?id=" + testId;
-	}
 	
-	@RequestMapping(value = "/modifyStepReport")
-	private String modifyStepReport(@RequestParam(required = true) long testId, @RequestParam(required = true) int stepId,
-			@RequestParam(required = true) String comment, @RequestParam(required = true) String result) {
-		TestReport testReport = daoFactory.getTestReportDao().find(testId);
-		StepReport stepReport = testReport.getStepReport(stepId);
-		if (stepReport!=null) {
-			stepReport.setComment(comment);
-			stepReport.setResult(result);
-		}		
-		return "redirect:/test?id=" + testId;
-	}
+	
+	
 	
 }

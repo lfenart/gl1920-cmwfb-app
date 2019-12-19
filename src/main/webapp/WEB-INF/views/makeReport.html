@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+	<head head th:replace="../fragments/template :: head">
+		<title>Création d'un rapport de test</title>
+	</head>
+	
+	<body>
+		<h2 style="text-align:center;">Création du rapport de test</h2>
+		<hr color="">
+		<div>
+			<h3>Nom du test : <i>[[${test.getName()}]] </i> </h3>
+		</div>
+		<hr color="">
+		<h4 style="text-decoration: underline;">Étape N° : [[${ test.getStepId(nextStep) + 1 }]] </h4>
+			<div>
+				<p>
+					<b>Nom de l'étape :</b>[[${nextStep.name}]]
+					
+				</p>
+				<p>
+					<b>Description : </b>[[${nextStep.text}]]
+				</p>
+			</div>
+			<div>
+				<form th:action="@{/addStepReport}"  method="POST" accept-charset="UTF-8">
+					<p>
+						Étape validé ?
+						<input type="radio" id="oui" name="success" value="true" checked onclick="setCommentUnrequired()">
+						<label for="oui">Oui</label>
+						<input type="radio" id="non" name="success" value="false" onclick="setCommentRequired()">
+						<label for="non">Non</label>
+					</p>
+					<textarea name="comment" id="comment"  rows="5" cols="35" placeholder="Commentaire ..." style="display:none"></textarea>
+					<input type ="hidden" name="id" th:value="${id}"><br><br>
+					<input type="submit" name="addStepReport" value="Suivant"/>
+					</form>
+			</div>
+	</body>
+	
+	<script>
+		function setCommentRequired(){
+			document.getElementById("comment").required = true;
+			document.getElementById("comment").style.display="";
+			
+		}
+		function setCommentUnrequired(){
+			document.getElementById("comment").required = false;
+			document.getElementById("comment").style.display="none";
+		}
+	</script>
+</html>
