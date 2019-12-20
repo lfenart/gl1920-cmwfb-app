@@ -136,6 +136,16 @@ public class TestControllerTest {
 		verify(daoTask).persist(test);
 		verify(daoTask, times(2)).find(1);
 	}
+	
+	@Test
+	public void deleteStep() {
+		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
+		int testId = 1;
+		test.setId(testId);
+		test.addStep(new Step());
+		when(daoTask.find(1)).thenReturn(test);
+		assertEquals("redirect:/modify?testBookId=" + 1 + "&id=" + testId, sut.testDeleteStep(1, testId, 0));
+	}
 
 	@Test
 	public void modify() throws IOException {
@@ -159,10 +169,5 @@ public class TestControllerTest {
 		sut.create(1, "test");
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).find(3);
-	}
-
-	@Test
-	public void list() throws IOException {
-
 	}
 }
