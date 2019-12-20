@@ -50,7 +50,7 @@ public class TestReportControllerTest {
 		TestReport report = new TestReport(1, test);
 		when(daoTask.find(1)).thenReturn(test);
 		when(daoTestReport.create(test)).thenReturn(report);
-		assertEquals("redirect:/test?id=1", sut.createReport(1, 1));
+		assertEquals("redirect:/test?id=" + 1 + "&testBookId=" + 1, sut.createReport(1, 1));
 		verify(daoTestReport).create(test);
 	}
 
@@ -61,13 +61,13 @@ public class TestReportControllerTest {
 		TestReport report = new TestReport(1, test);
 		when(daoTask.find(1)).thenReturn(test);
 		when(daoTestReport.create(test)).thenReturn(report);
-		assertEquals("redirect:/makeReport?id=1", sut.createReport(1, 1));
+		assertEquals("redirect:/makeReport?testBookId=" + 1 + "&id=" + 1, sut.createReport(1, 1));
 		verify(daoTestReport).create(test);
 	}
 
 	@Test
 	public void createReportNoTest() {
-		assertEquals("redirect:/test?id=1", sut.createReport(1, 1));
+		assertEquals("redirect:/test?id=" + 1 + "&testBookId=" + 1, sut.createReport(1, 1));
 	}
 
 	@Test
@@ -86,7 +86,7 @@ public class TestReportControllerTest {
 		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
 		TestReport report = new TestReport(1, test);
 		when(daoTestReport.find(1)).thenReturn(report);
-		assertEquals("redirect:/viewReport?id=1", sut.addStepReport(1, 1, "comment", false));
+		assertEquals("redirect:/viewReport?testBookId=" + 1 + "&id=" + 1, sut.addStepReport(1, 1, "comment", false));
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class TestReportControllerTest {
 		test.addStep(new Step());
 		TestReport report = new TestReport(1, test);
 		when(daoTestReport.find(1)).thenReturn(report);
-		assertEquals("redirect:/makeReport?id=1", sut.addStepReport(1, 1, "comment", true));
+		assertEquals("redirect:/makeReport?testBookId=" + 1 + "&id=" + 1, sut.addStepReport(1, 1, "comment", true));
 	}
 
 	@Test
@@ -107,8 +107,7 @@ public class TestReportControllerTest {
 		report.setCalendar(mock(Calendar.class));
 		ModelAndView ret = sut.reportTask(1, 1);
 		verify(daoFactory).getTestReportDao();
-		fr.uha.ensisa.gl.cmwfb.mantest.Test test2 = (fr.uha.ensisa.gl.cmwfb.mantest.Test) ret
-				.getModelMap().get("test");
+		fr.uha.ensisa.gl.cmwfb.mantest.Test test2 = (fr.uha.ensisa.gl.cmwfb.mantest.Test) ret.getModelMap().get("test");
 		assertNotNull(test2);
 	}
 
