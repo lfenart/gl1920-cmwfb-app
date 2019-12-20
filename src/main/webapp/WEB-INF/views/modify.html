@@ -1,42 +1,95 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Modify Test [[${test.name}]] (#[[${test.id}]])</title>
+<head head th:replace="../fragments/template :: head">
+<title>Modifier Test [[${test.name}]] (#[[${test.id}]])</title>
 </head>
 <body>
-	<header>
-		<h1>Modify Test #[[${test.id}]]</h1>
-	</header>
+<div th:replace="../fragments/template :: header"></div>
 	<section>
 		<div id="content">
-
-			<form th:action=" @{/testmodifiedname} " method="POST"
-				accept-charset="UTF-8">
-				<input type="hidden" name="id" th:value="${test.id}"> <input
-					type="text" name="newTestName" th:value="${test.name}"><br>
-				<input type="submit" name="create" value="Modify">
-			</form>
-
-			<div id="actions">
-				<h3>Etapes</h3>
-				<ul id="step-list">
-					<li  th:each="step,stepStat: ${test.steps}" >
-						<form th:action=" @{/testmodifiedstep} " method="POST" accept-charset="UTF-8">
-							<input type="hidden" name="testId" th:value="${test.id}"> 
-							<input type="hidden" name="stepId" th:value="${stepStat.index}"> 
-							<input type="text" name="newStep" th:value="${step.text}"><br>
-							<input type="submit" name="create" value="Modify">
+			<div class="container col-sm-6 col-sm-offset-3">
+				<div class="panel panel-primary">
+					<div class="panel-body">
+						<h3 class="text-on-pannel text-primary">
+							<strong class="text-uppercase"> Test #[[${test.id}]] </strong>
+						</h3>
+						<form th:action=" @{/testmodifiedname} " method="POST" accept-charset="UTF-8">
+							<h2>
+								<strong><u> Nom du test <a th:href="${'/test?id=' +  test.id + '&testBookId=' + testBook.id }">#[[${test.id}]]</a> : </u></strong>
+							</h2>
+							<input type="hidden" name="testBookId" th:value="${testBook.id}">
+							<input type="hidden" name="id" th:value="${test.id}"> 	
+							<input type="text" name="newTestName" th:value="${test.name}" style="color:#220fa3">
+							<input type="submit" name="Modify" value="Modifier" class="btn btn-warning btn-sm">
 						</form>
-					</li>
-				</ul>
-			</div>
-			<div>
-				<h3>Resultat</h3>
-				<p>[[${test.result}]]</p>
-			</div>
-		</div>
+						
+						<hr>
+						<div id="actions">
+							<h3><strong><u>Etapes</u></strong></h3>
+							<div id="step-list">
+							<ul class="d-block"  th:each="step,stepStat: ${test.steps}" >
+							<table>
+							<tr><td style="vertical-align:top">
+								
+								<form th:action=" @{/testmodifiedstep} " method="POST" accept-charset="UTF-8">
+								
+									<button type="button" class="btn btn-primary btn-circle" data-toggle="collapse" 
+											th:data-target="'#collapse'+${stepStat.index}" aria-expanded="false" th:aria-controls="'collapse'+${stepStat.index}">
+											<i class="fa fa-list"></i>
+									</button> 
+										<input type="hidden" name="testBookId" th:value="${testBook.id}">
+										<input type="hidden" name="id" th:value="${test.id}"> 
+										<input type="hidden" name="stepId" th:value="${stepStat.index}"> 
+										<input type="text"  style="width:50%" name="newStepName" th:value="${step.name}">
+										<input type="submit" name="Modify" value="Modifier" class="btn btn-warning btn-xs">
+										
+									<div class="collapse" th:id="'collapse'+${stepStat.index}">
+										<div class="card card-body">
+											<textarea class="col-md-12" rows="2" name="text" placeholder="Description ...">[[${step?.text}]]</textarea>
+										</div>
+									</div>
+								</form>
+								</td>
+								<td style="vertical-align:top">
+								<form th:action=" @{/testDeleteStep} " method="POST" accept-charset="UTF-8">
+									<input type="hidden" name="testBookId" th:value="${testBook.id}">
+									<input type="hidden" name="id" th:value="${test.id}"> 
+									<input type="hidden" name="stepId" th:value="${stepStat.index}"> 
+									<input type="submit" name="Supprimer" value="Supprimer" class="btn btn-danger btn-xs">
+								</form>
+								</td>
+								</tr></table>
+							</ul>
+								 
+							</div>
+							
+							<hr>
+							<form action="/addStep" method="GET" accept-charset="UTF-8">
+							<input type="hidden" name="testBookId" th:value="${testBook.id}">
+								<div class="form-group">
+									<label for="step">Nom de l'étape :</label> 
+									<input id="step" class="form-control" type="text" name="stepName" required>
+								</div>
+								<div>
+									<label>Description :</label>
+									<textarea class="col-md-12" rows="2" name="text" placeholder="Description ..."></textarea>
+								</div>
+								<input type="hidden" name="id" th:value="${ test.id }" /> 
+								<div style="text-align: center">
+									<input type="submit" value="Créer" class="btn btn-success">
+								</div>
+								
+							</form>
+						</div>
+						<br><br>
+						<div style="text-align: center">
+						<a th:href="${'/test?id=' +  test.id + '&testBookId=' + testBook.id }">Revenir au test</a>
+						</div>
+						
+					</div>
+				</div>
 	</section>
+	
 	<footer> </footer>
 </body>
 </html>

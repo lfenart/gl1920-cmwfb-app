@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head head th:replace="../fragments/template :: head">
+<title>Test books</title>
+</head>
+
+<body>
+	<div th:replace="../fragments/template :: header"></div>
+	<h1>Test books</h1>
+	<div id="tools">
+		<ul id="tests">
+			<li th:each="testBook: ${testBooks}"><a
+				th:href="${'/list?testBookId='+ testBook.id}">
+					[[${testBook.name}]] </a>
+				<form action="/deleteBook">
+					<input type="hidden" name="testBookId" th:value="${testBook.id}">
+					<input type="submit" name="delete" value="delete">
+				</form></li>
+		</ul>
+	</div>
+
+	<form action="/createBook/">
+		<input type="text" name="testBookName"><br> 
+		<input type="submit" name="newTestBook" value="new testBook"> <br>
+	</form>
+</body>
+</html>

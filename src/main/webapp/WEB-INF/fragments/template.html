@@ -4,9 +4,21 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		
     	<link rel="stylesheet" type="text/css" media="all" th:href="@{/resources/bootstrap.min.css}"/>
-		<link rel="stylesheet" type="text/css" media="all" th:href="@{/resources/style.css}"/>
+    	<link rel="stylesheet" type="text/css" media="all" th:href="@{/resources/bootstrap3.3.7/bootstrap.min.css}"/>
+		<link rel="stylesheet" th:href="@{/resources/style.css}"/>
+        <script type="text/javascript" th:src="@{/resources/bootstrap.min.js}" ></script>
+        <script type="text/javascript" th:src="@{/resources/jquery.min.js}" ></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+		
 	</head>
 	<body>
+		<div th:fragment="header" id="header">
+			<nav>
+				<a href = "/books"><p>Cahiers</p></a>
+				<a th:href = "${'/list?testBookId=' + testBookId}"><p>Liste</p></a>
+				<a th:href = "${'/creationSerieForm?testBookId=' + testBookId}"><p>Nouvelle suite de test</p></a>
+			</nav>
+		</div>
         <div th:fragment="footer">
             <script type="text/javascript" th:src="@{/resources/bootstrap.min.js}" ></script>
             <script type="text/javascript" th:src="@{/resources/project.js}"></script>

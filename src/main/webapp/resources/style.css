@@ -1,0 +1,51 @@
+.text-on-pannel {
+  background: #fff none repeat scroll 0 0;
+  height: auto;
+  margin-left: 20px;
+  padding: 3px 5px;
+  position: absolute;
+  margin-top: -47px;
+  border: 1px solid #337ab7;
+  border-radius: 8px;
+}
+
+.panel {
+  /* for text on pannel */
+  margin-top: 27px !important;
+  width: 80%;
+}
+
+.panel-body {
+  padding-top: 30px !important;
+}
+.btn-circle {
+    width: 25px;
+    height: 25px;
+    padding: 4px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.07857;   
+}
+    
+#header a {
+	text-decoration: none;
+	margin: 3px;
+	padding: 0;
+	background-color: grey;
+	color: white;
+	height: 90%;
+	width: 24%;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#header {
+	background-color: darkblue;
+	height: 60px;
+}
+
+#header nav {
+	height: 100%;
+}

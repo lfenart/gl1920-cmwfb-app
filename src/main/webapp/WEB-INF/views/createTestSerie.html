@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Creation d'une suite de tests</title>
-	</head>
-	<body>
-		<h2 style="text-align:center;">Creation d'une suite de tests</h2>
-		<hr color="">
-		<h3>Veuillez remplir les champs ci-dessous afin de proceder a la creation d'une suite de tests:</h3>
-		<form action="/createSerie/">
-			<label for="name"> Nom de la suite de tests :</label> 
-			<input type="text" name="name" placeholder="Nom"/><br>
-			<input type="submit" name="createSerie" value="Creer"/>
-		</form>
-	</body>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Creation d'une suite de tests</title>
+<link rel="stylesheet" type="text/css" href="../../resources/style.css">
+</head>
+<body>
+	<div th:replace="../fragments/template :: header"></div>
+	<h2 style="text-align: center;">Creation d'une suite de tests</h2>
+	<hr color="">
+	<h3>Veuillez remplir les champs ci-dessous afin de proceder a la
+		creation d'une suite de tests:</h3>
+	<form action="/createSerie/">
+		<input type="hidden" name="testBookId" th:value="${testBookId}" />
+		<label for="name"> Nom de la suite de tests :</label> <input
+			type="text" name="name" placeholder="Nom" /><br> <input
+			type="submit" name="createSerie" value="Creer" />
+	</form>
 </html>
