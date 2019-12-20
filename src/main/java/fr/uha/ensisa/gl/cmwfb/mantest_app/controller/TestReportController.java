@@ -25,7 +25,6 @@ public class TestReportController {
 	
 	@RequestMapping(value = "/createReport")
 	public String createReport(@RequestParam(required = true) long testBookId,@RequestParam(required = true) long id) {
-		TestBook testbook = daoFactory.getTestBookDao().find(testBookId);
 		Test test = this.daoFactory.getTestDao().find(id);
 		if (test != null) {
 			TestReport testReport = this.daoFactory.getTestReportDao().create(test);			
@@ -42,7 +41,6 @@ public class TestReportController {
 	@RequestMapping(value = "/makeReport")
 	public ModelAndView makeReportTask(@RequestParam(required = true) long testBookId, @RequestParam long id) {
 		ModelAndView ret = new ModelAndView("makeReport");
-		TestBook testBook = daoFactory.getTestBookDao().find(testBookId);
 		TestReport testReport = daoFactory.getTestReportDao().find(id);
 		Test test = testReport.getTest();
 		Step nextStep = testReport.getNextStep();

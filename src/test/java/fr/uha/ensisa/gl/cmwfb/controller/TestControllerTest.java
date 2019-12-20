@@ -20,8 +20,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.uha.ensisa.gl.cmwfb.mantest.Step;
+import fr.uha.ensisa.gl.cmwfb.mantest.TestBook;
 import fr.uha.ensisa.gl.cmwfb.mantest.TestSerie;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
+import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestBookDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestReportDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestSerieDao;
@@ -37,6 +39,8 @@ public class TestControllerTest {
 	public TestController sut;
 	@Mock
 	private TestSerieDao daoTestSerie;
+	@Mock
+	private TestBookDao daoTestBook;
 
 	@Before
 	public void prepareDao() {
@@ -46,23 +50,23 @@ public class TestControllerTest {
 		sut.daoFactory = this.daoFactory;
 		when(daoFactory.getTestReportDao()).thenReturn(this.daoTestReport);
 		when(daoFactory.getTestSerieDao()).thenReturn(this.daoTestSerie);
+		when(daoFactory.getTestBookDao()).thenReturn(this.daoTestBook);
+		TestBook testBook = new TestBook();
+		testBook.setId(1);
+		when(daoTestBook.find(1)).thenReturn(testBook);
 	}
 
-	/*@Test
-	public void emptyList() throws IOException {
-		ModelAndView ret = sut.list();
-		Collection<fr.uha.ensisa.gl.cmwfb.mantest.Test> tests = (Collection<fr.uha.ensisa.gl.cmwfb.mantest.Test>) ret
-				.getModelMap().get("tests");
-		assertNotNull(tests);
-		assertTrue(tests.isEmpty());
-	}
-
-	@Test
-	public void createTest() throws IOException {
-		sut.create("test");
-		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
-		verify(daoTask).find(1);
-	}*/
+	/*
+	 * @Test public void emptyList() throws IOException { ModelAndView ret =
+	 * sut.list(); Collection<fr.uha.ensisa.gl.cmwfb.mantest.Test> tests =
+	 * (Collection<fr.uha.ensisa.gl.cmwfb.mantest.Test>) ret
+	 * .getModelMap().get("tests"); assertNotNull(tests);
+	 * assertTrue(tests.isEmpty()); }
+	 * 
+	 * @Test public void createTest() throws IOException { sut.create("test");
+	 * verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
+	 * verify(daoTask).find(1); }
+	 */
 
 	@Test
 	public void modifyTestName() throws IOException {
@@ -74,7 +78,7 @@ public class TestControllerTest {
 		verify(daoTask).find(1);
 		verify(test).setName("name");
 	}
-	
+
 	@Test
 	public void modifyTestStep() throws IOException {
 		fr.uha.ensisa.gl.cmwfb.mantest.Test test = mock(fr.uha.ensisa.gl.cmwfb.mantest.Test.class);
@@ -82,7 +86,7 @@ public class TestControllerTest {
 		daoTask.persist(test);
 		when(daoTask.find(1)).thenReturn(test);
 		when(test.getStep(0)).thenReturn(step);
-		sut.TestModifiedStep(1, 1, 0, "stepname","steptext");
+		sut.TestModifiedStep(1, 1, 0, "stepname", "steptext");
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).find(1);
 		verify(step).setName("stepname");
@@ -94,7 +98,7 @@ public class TestControllerTest {
 		sut.test(1, 1);
 		verify(daoTask).find(1);
 	}
-	
+
 	@Test
 	public void testTest() throws IOException {
 		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
@@ -111,39 +115,39 @@ public class TestControllerTest {
 		when(daoTask.count()).thenReturn(0L, 1L);
 		when(daoTask.find(1)).thenReturn(test);
 		when(daoTestSerie.findAll()).thenReturn(new ArrayList<TestSerie>());
-		//sut.delete(1L);
+		sut.delete(1, 1);
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).remove(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 	}
-	
-	@Test 
-	public void testAddDeleteStep(){
-		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
-		int testId=1;
-		test.setId(testId);
-		when(daoTask.find(1)).thenReturn(null,test,test);
-		assertEquals("redirect:/modify?id="+testId , sut.testDeleteStep(1,testId, 0));
-		daoTask.persist(test);
-		sut.addStep(1,1, "step1", "");
-		verify(daoTask).persist(test);
-		verify(daoTask,times(2)).find(1);
-	}
-	
+
 	@Test
-	public void modify() throws IOException{
+	public void testAddDeleteStep() {
 		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
-		int testId=1;
+		int testId = 1;
 		test.setId(testId);
-		when(daoTask.find(1)).thenReturn(null,test);
-		ModelAndView ret = this.sut.modify(1,testId);
-		assertEquals("notest",ret.getViewName());
+		when(daoTask.find(1)).thenReturn(null, test, test);
+		assertEquals("redirect:/modify?testBookId=" + 1 + "&id=" + testId, sut.testDeleteStep(1, testId, 0));
 		daoTask.persist(test);
-		ret = this.sut.modify(1,testId);
-		assertEquals("modify",ret.getViewName());
-		
+		sut.addStep(1, 1, "step1", "");
+		verify(daoTask).persist(test);
+		verify(daoTask, times(2)).find(1);
+	}
+
+	@Test
+	public void modify() throws IOException {
+		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
+		int testId = 1;
+		test.setId(testId);
+		when(daoTask.find(1)).thenReturn(null, test);
+		ModelAndView ret = this.sut.modify(1, testId);
+		assertEquals("notest", ret.getViewName());
+		daoTask.persist(test);
+		ret = this.sut.modify(1, testId);
+		assertEquals("modify", ret.getViewName());
+
 		verify(daoTask).persist(test);
 	}
-	
+
 	@Test
 	public void createTestInvalidId() throws IOException {
 		when(daoTask.find(2)).thenReturn(mock(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));

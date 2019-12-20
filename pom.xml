@@ -201,6 +201,28 @@
 		<finalName>${project.name}</finalName>
 		<plugins>
 			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.4.10</version>
+				<configuration>
+					<targetClasses>
+						<param>fr.uha.ensisa.gl.cmwfb.mantest_app.controller.*</param>
+					</targetClasses>
+					<targetTests>
+						<param>fr.uha.ensisa.gl.cmwfb.controller.*</param>
+					</targetTests>
+				</configuration>
+				<executions>
+					<execution>
+						<id>pid-report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>mutationCoverage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.7.1</version>
