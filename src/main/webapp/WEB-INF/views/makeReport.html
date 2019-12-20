@@ -25,6 +25,7 @@
 			</div>
 			<div>
 				<form th:action="@{/addStepReport}"  method="POST" accept-charset="UTF-8">
+					<input type="hidden" name="testBookId" th:value="${testBookId}" />
 					<p>
 						Étape validé ?
 						<input type="radio" id="oui" name="success" value="true" checked onclick="setCommentUnrequired()">

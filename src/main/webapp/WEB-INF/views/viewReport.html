@@ -31,7 +31,7 @@
 		<br>
 		
     	
-		<a th:href="${'/test?id=' + test.id}">Revenir au test</a>
+		<a th:href="${'/test?testBookId=' + testBookId + '&id=' + test.id}">Revenir au test</a>
 		<br>
-		<a th:href="${'/list'}">Retour à l'accueil</a>
+		<a th:href="${'/list?testBookId=' + testBookId}">Retour à l'accueil</a>
 	</body>

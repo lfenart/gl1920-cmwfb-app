@@ -24,6 +24,7 @@ public class TestController {
 	@RequestMapping(value = "/list")
 	public ModelAndView list(@RequestParam(required = true) long testBookId) throws IOException {
 		ModelAndView ret = new ModelAndView("list");
+		ret.addObject("testBookId",testBookId);
 		ret.addObject("testBook", daoFactory.getTestBookDao().find(testBookId));
 		ret.addObject("tests", daoFactory.getTestDao().findAll());
 		ret.addObject("testReports", daoFactory.getTestReportDao().findAll());
@@ -45,45 +46,50 @@ public class TestController {
 	}
 
 	@RequestMapping(value = "/modify")
-	public ModelAndView modify(@RequestParam(required = true) long id) throws IOException {
+	public ModelAndView modify(@RequestParam(required = true) long testBookId, @RequestParam(required = true) long id) throws IOException {
 		ModelAndView ret = new ModelAndView("modify");
+		TestBook testbook = daoFactory.getTestBookDao().find(testBookId);
 		Test test = daoFactory.getTestDao().find(id);
 		if (test == null) {
 			return testNotFound();
 		} else {
 			ret.addObject("test", test);
+			ret.addObject("testBook", testbook);
 			return ret;
 		}
 	}
 
 	@RequestMapping(value = "/addStep")
-	public String addStep(@RequestParam(required = true) long id, @RequestParam(required = true) String stepName,
+	public String addStep(@RequestParam(required = true) long testBookId, @RequestParam(required = true) long id, @RequestParam(required = true) String stepName,
 			@RequestParam String text) {
+		TestBook testbook = daoFactory.getTestBookDao().find(testBookId);
 		Test test = daoFactory.getTestDao().find(id);
 		Step step = new Step();
 		step.setName(stepName);
 		step.setText(text);
 		test.addStep(step);
-		return "redirect:/modify?id=" + id;
+		return "redirect:/modify?testBookId=" + testBookId + "&id=" +  id;
 	}
 
 	@RequestMapping(value = "/testmodifiedname")
-	public String TestModifiedName(@RequestParam(required = true) long id,
+	public String TestModifiedName(@RequestParam(required = true) long testBookId, @RequestParam(required = true) long id,
 			@RequestParam(required = true) String newTestName) throws IOException {
+		TestBook testbook = daoFactory.getTestBookDao().find(testBookId);
 		Test test = daoFactory.getTestDao().find(id);
 		if (test == null) {
 			testNotFound();
 		} else {
 			test.setName(newTestName);
 		}
-		return "redirect:/modify?id=" + id;
+		return "redirect:/modify?testBookId=" + testBookId + "&id=" +  id;
 	}
 
 	@RequestMapping(value = "/testmodifiedstep")
-	public String TestModifiedStep(@RequestParam(required = true) long testId,
+	public String TestModifiedStep(@RequestParam(required = true) long testBookId, @RequestParam(required = true) long id,
 			@RequestParam(required = true) int stepId, @RequestParam(required = true) String newStepName,
 			@RequestParam String text) throws IOException {
-		Test test = daoFactory.getTestDao().find(testId);
+		TestBook testbook = daoFactory.getTestBookDao().find(testBookId);
+		Test test = daoFactory.getTestDao().find(id);
 		if (test != null) {
 			Step step = test.getStep(stepId);
 			if (step != null) {
@@ -92,21 +98,22 @@ public class TestController {
 			}
 		}
 
-		return "redirect:/modify?id=" + testId;
+		return "redirect:/modify?testBookId=" + testBookId + "&id=" +  id;
 	}
 
 	@RequestMapping(value = "/testDeleteStep")
-	public String testDeleteStep(@RequestParam(required = true) long testId,
+	public String testDeleteStep(@RequestParam(required = true) long testBookId, @RequestParam(required = true) long id,
 			@RequestParam(required = true) int stepId) {
-		Test test = daoFactory.getTestDao().find(testId);
+		
+		Test test = daoFactory.getTestDao().find(id);
 		if (test != null) {
 			Step step = test.getStep(stepId);
 			if (step != null) {
 				test.removeStep(stepId);
 			}
 		}
-
-		return "redirect:/modify?id=" + testId;
+		
+		return "redirect:/modify?testBookId=" + testBookId + "&id=" +  id;
 	}
 
 	@RequestMapping(value = "/delete")
@@ -138,6 +145,7 @@ public class TestController {
 		} else {
 			ret.addObject("test", test);
 			ret.addObject("testBook", testbook);
+			ret.addObject("testBookId", testBookId);
 			return ret;
 		}
 	}

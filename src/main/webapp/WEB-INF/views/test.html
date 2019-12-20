@@ -17,8 +17,8 @@
 							<strong><u> Test name : </u></strong><font style="color:#220fa3">  [[${test.name}]]</font>
 						</h2>
 						<div id="tools">							
-					  		<a th:if="${test.getNumberOfSteps()!=0}" class="btn btn-success" th:href="${'/createReport?id=' + test.id}">Run <i class="fa fa-chevron-circle-right"></i></a>
-							<a class="btn btn-warning" th:href="${'/modify?id=' + test.id}">Modifier</a>
+					  		<a th:if="${test.getNumberOfSteps()!=0}" class="btn btn-success" th:href="${'/createReport?testBookId=' + testBook.id + '&id=' +  test.id}">Run <i class="fa fa-chevron-circle-right"></i></a>
+							<a class="btn btn-warning" th:href="${'/modify?testBookId=' + testBook.id + '&id=' +  test.id}">Modifier</a>
 							<a class="btn btn-danger" th:href="${'/delete?testBookId=' + testBook.id + '&id=' +  test.id}"+>Supprimer</a>
 						</div>
 						<hr>
