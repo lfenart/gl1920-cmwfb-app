@@ -1,6 +1,9 @@
 package fr.uha.ensisa.gl.cmwfb.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collection;
@@ -19,7 +22,6 @@ import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestReportDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestSerieDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.mem.TestBookDaoMem;
 import fr.uha.ensisa.gl.cmwfb.mantest_app.controller.TestBookController;
-import fr.uha.ensisa.gl.cmwfb.mantest_app.controller.TestController;
 
 public class TestBookControllerTest {
 	@Mock
@@ -63,6 +65,15 @@ public class TestBookControllerTest {
 		when(daoFactory.getTestBookDao()).thenReturn(testBookDao);
 		assertEquals("redirect:/books", sut.createBook("bookName"));
 		assertNotNull(testBookDao.find(1));
+	}
+	
+	@Test
+	public void deleteBook() {
+		TestBook testBook = new TestBook();
+		when(daoTestBook.find(1)).thenReturn(testBook);
+		assertEquals("redirect:/books", sut.deleteBook(1));
+		verify(daoTestBook).find(1);
+		verify(daoTestBook).remove(testBook);
 	}
 
 }
