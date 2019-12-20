@@ -92,6 +92,7 @@ public class TestSerieController {
 		TestSerie test = daoFactory.getTestSerieDao().find(id);
 		if (test != null) {
 			daoFactory.getTestSerieDao().deleteSerie(test);
+			daoFactory.getTestBookDao().find(testBookId).remove(test);
 		}
 		return "redirect:/list?testBookId=" + testBookId;
 	}

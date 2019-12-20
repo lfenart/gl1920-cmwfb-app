@@ -46,6 +46,29 @@
 				</div>
 			</form>
 		</div>
-	
+		<hr>
+		
+		<div class="row justify-content-center col-auto">
+		<div class="table-responsive-md">
+			<table class="table table-bordered table-striped w-auto text-center">
+				  <thead class="thead-dark">
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col">Nom de la suite</th>
+				      <th scope="col">Nombre de tests</th>
+				      <th scope="col">Nombre de suites</th>
+				    </tr>
+				  </thead>
+				  <tbody id="tests">
+				    <tr th:each="testSerie: ${testSeries}" th:id="${'testSerie_' + testSerie.id }">
+				      <th scope="row" ><a th:href="${'/viewSerie?testBookId=' + testBookId + '&id=' + testSerie.id }">[[${testSerie.id}]]</a></th>
+				      <td>[[${testSerie.name}]]</td>
+				      <td th:text="${#arrays.length(testSerie.tests)}"></td>
+				      <td th:text="${#arrays.length(testSerie.testSeries)}"></td>				      
+				    </tr>
+				  </tbody>
+			</table>
+		</div>
+		</div>
 	</body>
 </html>

@@ -33,6 +33,7 @@ public class TestController {
 		ret.addObject("testBook", daoFactory.getTestBookDao().find(testBookId));
 		ret.addObject("tests", daoFactory.getTestBookDao().find(testBookId).getTestList());
 		ret.addObject("testReports", daoFactory.getTestReportDao().findAll());
+		ret.addObject("testSeries",daoFactory.getTestBookDao().find(testBookId).getTestSerieList());
 		return ret;
 	}
 
