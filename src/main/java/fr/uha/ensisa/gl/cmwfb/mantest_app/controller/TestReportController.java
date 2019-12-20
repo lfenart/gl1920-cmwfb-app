@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import fr.uha.ensisa.gl.cmwfb.mantest.Step;
 import fr.uha.ensisa.gl.cmwfb.mantest.StepReport;
 import fr.uha.ensisa.gl.cmwfb.mantest.Test;
+import fr.uha.ensisa.gl.cmwfb.mantest.TestBook;
 import fr.uha.ensisa.gl.cmwfb.mantest.TestReport;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
 
@@ -21,28 +22,31 @@ public class TestReportController {
 
 	@Autowired
 	public DaoFactory daoFactory;
-
+	
 	@RequestMapping(value = "/createReport")
-	public String createReport(@RequestParam(required = true) long id) {
+	public String createReport(@RequestParam(required = true) long testBookId,@RequestParam(required = true) long id) {
+		TestBook testbook = daoFactory.getTestBookDao().find(testBookId);
 		Test test = this.daoFactory.getTestDao().find(id);
 		if (test != null) {
-			TestReport testReport = this.daoFactory.getTestReportDao().create(test);
-
-			if (testReport.getNextStep() != null) {
-				return "redirect:/makeReport?id=" + testReport.getId();
-			} else {
-				return "redirect:/test?id=" + id;
-			}
+			TestReport testReport = this.daoFactory.getTestReportDao().create(test);			
+			if(testReport.getNextStep() != null) {
+				return "redirect:/makeReport?testBookId="+ testBookId +"&id=" + testReport.getId();	
+				}
+				else {
+					return "redirect:/test?id=" + id + "&testBookId=" + testBookId;
+				}
 		}
-		return "redirect:/test?id=" + id;
+		return "redirect:/test?id=" + id + "&testBookId=" + testBookId;
 	}
 
 	@RequestMapping(value = "/makeReport")
-	public ModelAndView makeReportTask(@RequestParam long id) {
+	public ModelAndView makeReportTask(@RequestParam(required = true) long testBookId, @RequestParam long id) {
 		ModelAndView ret = new ModelAndView("makeReport");
+		TestBook testBook = daoFactory.getTestBookDao().find(testBookId);
 		TestReport testReport = daoFactory.getTestReportDao().find(id);
 		Test test = testReport.getTest();
 		Step nextStep = testReport.getNextStep();
+		ret.addObject("testBookId", testBookId);
 		ret.addObject("id", id);
 		ret.addObject("test", test);
 		ret.addObject("nextStep", nextStep);
@@ -51,19 +55,20 @@ public class TestReportController {
 	}
 
 	@RequestMapping(value = "/addStepReport")
-	public String addStepReport(@RequestParam(required = true) long id, @RequestParam(required = true) String comment,
-			@RequestParam(required = true) boolean success) {
+	public String addStepReport(@RequestParam(required = true) long testBookId, @RequestParam(required = true) long id,
+			@RequestParam(required = true) String comment, @RequestParam(required = true) boolean success) {
 		TestReport testReport = daoFactory.getTestReportDao().find(id);
 		testReport.next(success, comment);
-		if (testReport.getNextStep() != null) {
-			return "redirect:/makeReport?id=" + testReport.getId();
-		} else {
-			return "redirect:/viewReport?id=" + testReport.getId();
+		if(testReport.getNextStep() != null) {
+			return "redirect:/makeReport?testBookId="+testBookId+"&id=" + testReport.getId();	
+		}
+		else{
+			return "redirect:/viewReport?testBookId="+testBookId+"&id=" + testReport.getId();	
 		}
 	}
 
 	@RequestMapping(value = "/viewReport")
-	public ModelAndView reportTask(@RequestParam long id) {
+	public  ModelAndView reportTask(@RequestParam(required = true) long testBookId, @RequestParam long id) {
 		TestReport currentReport = daoFactory.getTestReportDao().find(id);
 		Test currentTest = currentReport.getTest();
 		List<Step> currentSteps = currentTest.getSteps();
@@ -77,6 +82,7 @@ public class TestReportController {
 		ret.addObject("testReport", currentReport);
 		ret.addObject("Steps", currentSteps);
 		ret.addObject("StepReports", stepReports);
+		ret.addObject("testBookId", testBookId );
 		return ret;
 	}
 
