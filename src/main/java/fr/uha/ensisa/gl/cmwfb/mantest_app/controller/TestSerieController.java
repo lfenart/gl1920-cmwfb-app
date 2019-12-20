@@ -32,7 +32,6 @@ public class TestSerieController {
     		Test test = this.daoFactory.getTestDao().find(testId);
             TestSerie testSerie = this.daoFactory.getTestSerieDao().find(serieId);
             testSerie.add(test);
-            this.daoFactory.getTestSerieDao().persist(testSerie);
             return "redirect:/viewSerie?id=" + serieId;
     }
     @RequestMapping(value = "/removeTest")
@@ -40,7 +39,6 @@ public class TestSerieController {
     		Test test = this.daoFactory.getTestDao().find(testId);
             TestSerie testSerie = this.daoFactory.getTestSerieDao().find(serieId);
             testSerie.remove(test);
-            this.daoFactory.getTestSerieDao().persist(testSerie);
             return "redirect:/viewSerie?id=" + serieId;
     }
     
@@ -50,7 +48,6 @@ public class TestSerieController {
     		TestSerie test = this.daoFactory.getTestSerieDao().find(testSerieId);
             TestSerie testSerie = this.daoFactory.getTestSerieDao().find(serieId);
             testSerie.add(test);
-            this.daoFactory.getTestSerieDao().persist(testSerie);
             return "redirect:/viewSerie?id=" + serieId;
     }
     @RequestMapping(value = "/removeTestSerie")
@@ -58,7 +55,6 @@ public class TestSerieController {
     		TestSerie test = this.daoFactory.getTestSerieDao().find(testSerieId);
             TestSerie testSerie = this.daoFactory.getTestSerieDao().find(serieId);
             testSerie.removeSerie(test);
-            this.daoFactory.getTestSerieDao().persist(testSerie);
             return "redirect:/viewSerie?id=" + serieId;
     }
     
@@ -67,7 +63,6 @@ public class TestSerieController {
 		TestSerie currentSerie = daoFactory.getTestSerieDao().find(id);
 		Test[] current = daoFactory.getTestSerieDao().find(id).getTests();
 		ModelAndView ret = new ModelAndView("viewSerie");
-		ret = new ModelAndView("viewSerie");
 		ret.addObject("tests", current);
 		ret.addObject("id",id);
 		ret.addObject("name", currentSerie.getName());

@@ -1,12 +1,13 @@
 package fr.uha.ensisa.gl.cmwfb.controller;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -114,4 +115,33 @@ public class TestControllerTest {
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).remove(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 	}
+	
+	@Test 
+	public void testAddDeleteStep(){
+		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
+		int testId=1;
+		test.setId(testId);
+		when(daoTask.find(1)).thenReturn(null,test,test);
+		assertEquals("redirect:/modify?id="+testId , sut.testDeleteStep(testId, 0));
+		daoTask.persist(test);
+		sut.addStep(1, "step1", "");
+		verify(daoTask).persist(test);
+		verify(daoTask,times(2)).find(1);
+	}
+	
+	@Test
+	public void modify() throws IOException{
+		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
+		int testId=1;
+		test.setId(testId);
+		when(daoTask.find(1)).thenReturn(null,test);
+		ModelAndView ret = this.sut.modify(testId);
+		assertEquals("notest",ret.getViewName());
+		daoTask.persist(test);
+		ret = this.sut.modify(testId);
+		assertEquals("modify",ret.getViewName());
+		
+		verify(daoTask).persist(test);
+	}
+	
 }
