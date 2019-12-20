@@ -149,11 +149,14 @@ public class TestSerieControllerTest {
 	@Test
 	public void deleteSerie() {
 		fr.uha.ensisa.gl.cmwfb.mantest.TestSerie serieTest = new fr.uha.ensisa.gl.cmwfb.mantest.TestSerie(1, "serie1");
+		fr.uha.ensisa.gl.cmwfb.mantest.TestBook testBook = new fr.uha.ensisa.gl.cmwfb.mantest.TestBook();
 		when(daoTestSerie.find(1)).thenReturn(null, serieTest);
+		when(daoTestBook.find(1)).thenReturn(testBook);
 
 		sut.deleteSerie(1L, 1L);
 		sut.deleteSerie(1L, 1L);
-
+		
+		verify(daoTestBook).find(1);
 		verify(daoTestSerie, times(2)).find(1);
 		verify(daoTestSerie).deleteSerie(any(fr.uha.ensisa.gl.cmwfb.mantest.TestSerie.class));
 	}
