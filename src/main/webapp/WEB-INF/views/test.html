@@ -19,7 +19,7 @@
 						<div id="tools">							
 					  		<a th:if="${test.getNumberOfSteps()!=0}" class="btn btn-success" th:href="${'/createReport?id=' + test.id}">Run <i class="fa fa-chevron-circle-right"></i></a>
 							<a class="btn btn-warning" th:href="${'/modify?id=' + test.id}">Modifier</a>
-							<a class="btn btn-danger" th:href="${'/delete?id=' + test.id}">Supprimer</a>
+							<a class="btn btn-danger" th:href="${'/delete?testBookId=' + testBook.id + '&id=' +  test.id}"+>Supprimer</a>
 						</div>
 						<hr>
 						<div id="actions">

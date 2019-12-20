@@ -22,16 +22,16 @@ public class TestController {
 	public DaoFactory daoFactory;
 
 	@RequestMapping(value = "/list")
-	public ModelAndView list(/*@RequestParam(required = true) long testBookId*/) throws IOException {
+	public ModelAndView list(@RequestParam(required = true) long testBookId) throws IOException {
 		ModelAndView ret = new ModelAndView("list");
-		//ret.addObject("testBook", daoFactory.getTestBookDao().find(testBookId));
+		ret.addObject("testBook", daoFactory.getTestBookDao().find(testBookId));
 		ret.addObject("tests", daoFactory.getTestDao().findAll());
 		ret.addObject("testReports", daoFactory.getTestReportDao().findAll());
 		return ret;
 	}
 
 	@RequestMapping(value = "/create")
-	public String create(@RequestParam(required = true) String testName) throws IOException {
+	public String create(@RequestParam(required = true) long testBookId, @RequestParam(required = true) String testName) throws IOException {
 		Test newTest = new Test();
 		long id = daoFactory.getTestDao().count() + 1;
 		while (daoFactory.getTestDao().find(id) != null)
@@ -39,7 +39,9 @@ public class TestController {
 		newTest.setId(id);
 		newTest.setName(testName);
 		daoFactory.getTestDao().persist(newTest);
-		return "redirect:/list";
+		TestBook testBook = daoFactory.getTestBookDao().find(testBookId);
+		testBook.addTest(newTest);
+		return "redirect:/list?testBookId="+ testBookId;
 	}
 
 	@RequestMapping(value = "/modify")
@@ -108,10 +110,12 @@ public class TestController {
 	}
 
 	@RequestMapping(value = "/delete")
-	public String delete(@RequestParam(required = true) long id) {
+	public String delete(@RequestParam(required = true) long testBookId, @RequestParam(required = true) long id) {
+		TestBook testbook = daoFactory.getTestBookDao().find(testBookId);
 		Test test = daoFactory.getTestDao().find(id);
 		if (test != null) {
 			daoFactory.getTestDao().remove(test);
+			testbook.remove(test);
 			for (TestSerie serie : daoFactory.getTestSerieDao().findAll()) {
 				serie.remove(test);
 			}
@@ -119,19 +123,21 @@ public class TestController {
 			if (testReport != null)
 				daoFactory.getTestReportDao().remove(testReport);
 		}
-		return "redirect:/list";
+		return "redirect:/list?testBookId="+ testBookId;
 	}
 
 	@RequestMapping(value = "/test")
-	public ModelAndView test(@RequestParam(required = true) long id) {
+	public ModelAndView test(@RequestParam(required = true) long testBookId,@RequestParam(required = true) long id) {
 		ModelAndView ret = new ModelAndView("test");
 		TestReport currentReport = daoFactory.getTestReportDao().find(id);
 		ret.addObject("testReport", currentReport);
+		TestBook testbook = daoFactory.getTestBookDao().find(testBookId);
 		Test test = daoFactory.getTestDao().find(id);
 		if (test == null) {
 			return testNotFound();
 		} else {
 			ret.addObject("test", test);
+			ret.addObject("testBook", testbook);
 			return ret;
 		}
 	}
