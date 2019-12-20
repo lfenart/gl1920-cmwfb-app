@@ -40,11 +40,11 @@
 				<th scope="col"></th>
 			</tr>
 		</thead>
-		<tbody id="testSeries">
-			<tr th:each="testSerie: ${series}" th:id="${'testSerie_' + testSerie.id }">
-				<th scope="row"><a th:href="${'/testSerie?id=' + testSerie.id}">[[${testSerie.id}]]</a></th>
-				<td>[[${testSerie.name}]]</td>
-				<td><a th:href="${'/removeTestSerie/?serieId=' + id + '&testSerieId=' + testSerie.id}">Supprimer</a></td>
+		<tbody id="viewSeries">
+			<tr th:each="viewSerie: ${series}" th:id="${'viewSerie_' + viewSerie.id }">
+				<th scope="row"><a th:href="${'/viewSerie?id=' + viewSerie.id}">[[${viewSerie.id}]]</a></th>
+				<td>[[${viewSerie.name}]]</td>
+				<td><a th:href="${'/removeviewSerie/?serieId=' + id + '&viewSerieId=' + viewSerie.id}">Supprimer</a></td>
 				<td></td>
 			</tr>
 		</tbody>
