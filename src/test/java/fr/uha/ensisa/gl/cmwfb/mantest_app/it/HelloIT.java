@@ -73,11 +73,11 @@ public class HelloIT {
 
 	@Test
 	public void testConnection() throws Exception {
-		URL url = new URL("http://localhost:" + port + "/test?id=1");
+		URL url = new URL("http://localhost:" + port + "/test?testBookId=1&id=1");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.connect();
         assertEquals(200, connection.getResponseCode());
-        url = new URL("http://localhost:" + port + "/test?id=1000");
+        url = new URL("http://localhost:" + port + "/test?testBookId=1&id=1000");
         connection = (HttpURLConnection) url.openConnection();
         connection.connect();
         assertEquals(200, connection.getResponseCode());
@@ -85,7 +85,7 @@ public class HelloIT {
 	
 	@Test
 	public void testNotFound() {
-		driver.get("http://localhost:" + port + "/test?id=1000");
+		driver.get("http://localhost:" + port + "/test?testBookId=1&id=1000");
 		assertTrue(driver.getPageSource().contains("not found"));
 	}
 

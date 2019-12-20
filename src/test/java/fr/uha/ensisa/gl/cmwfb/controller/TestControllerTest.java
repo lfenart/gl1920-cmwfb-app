@@ -19,8 +19,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.uha.ensisa.gl.cmwfb.mantest.Step;
+import fr.uha.ensisa.gl.cmwfb.mantest.TestBook;
 import fr.uha.ensisa.gl.cmwfb.mantest.TestSerie;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
+import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestBookDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestReportDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestSerieDao;
@@ -36,6 +38,8 @@ public class TestControllerTest {
 	public TestController sut;
 	@Mock
 	private TestSerieDao daoTestSerie;
+	@Mock
+	private TestBookDao daoTestBook;
 
 	@Before
 	public void prepareDao() {
@@ -45,6 +49,10 @@ public class TestControllerTest {
 		sut.daoFactory = this.daoFactory;
 		when(daoFactory.getTestReportDao()).thenReturn(this.daoTestReport);
 		when(daoFactory.getTestSerieDao()).thenReturn(this.daoTestSerie);
+		when(daoFactory.getTestBookDao()).thenReturn(this.daoTestBook);
+		TestBook testBook = new TestBook();
+		testBook.setId(1);
+		when(daoTestBook.find(1)).thenReturn(testBook);
 	}
 
 	/*@Test
@@ -110,7 +118,7 @@ public class TestControllerTest {
 		when(daoTask.count()).thenReturn(0L, 1L);
 		when(daoTask.find(1)).thenReturn(test);
 		when(daoTestSerie.findAll()).thenReturn(new ArrayList<TestSerie>());
-		//sut.delete(1L);
+		sut.delete(1, 1);
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).remove(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 	}
