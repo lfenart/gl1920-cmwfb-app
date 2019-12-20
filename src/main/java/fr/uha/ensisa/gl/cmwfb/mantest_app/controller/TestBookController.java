@@ -6,12 +6,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import fr.uha.ensisa.gl.cmwfb.mantest.Test;
 import fr.uha.ensisa.gl.cmwfb.mantest.TestBook;
+import fr.uha.ensisa.gl.cmwfb.mantest.TestReport;
+import fr.uha.ensisa.gl.cmwfb.mantest.TestSerie;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
 
 @Controller
 public class TestBookController {
-	
+
 	@Autowired
 	public DaoFactory daoFactory;
 	
@@ -35,13 +38,10 @@ public class TestBookController {
 			return "redirect:/books";
 		}
 		
-		/*@RequestMapping(value = "/book")
-		public ModelAndView book(@RequestParam(required = true) long testBookId) throws IOException {
-			ModelAndView ret = new ModelAndView("book");
-			ret.addObject("testBook", daoFactory.getTestBookDao().find(testBookId));
-			ret.addObject("tests", daoFactory.getTestBookDao().find(testBookId).getTests());
-			ret.addObject("state", daoFactory.getTestBookDao().find(testBookId).getState());
-
-			return ret;
-		}*/
+		@RequestMapping(value="/deleteBook")
+		public String deleteBook(@RequestParam(required = true) long testBookId) {
+			TestBook testbook = daoFactory.getTestBookDao().find(testBookId);
+			daoFactory.getTestBookDao().remove(testbook);
+			return "redirect:/books";
+		}
 }

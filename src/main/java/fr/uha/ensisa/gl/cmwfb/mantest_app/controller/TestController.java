@@ -25,14 +25,15 @@ public class TestController {
 
 	@RequestMapping(value = "/list")
 	public ModelAndView list(@RequestParam(required = true) Long testBookId) throws IOException {
-		if (testBookId == null) {
-			return listNotFound();
-		}
+//		if (testBookId == null) {
+//			return listNotFound();
+//		}
 		ModelAndView ret = new ModelAndView("list");
 		ret.addObject("testBookId", testBookId);
 		ret.addObject("testBook", daoFactory.getTestBookDao().find(testBookId));
 		ret.addObject("tests", daoFactory.getTestBookDao().find(testBookId).getTestList());
 		ret.addObject("testReports", daoFactory.getTestReportDao().findAll());
+		ret.addObject("testSeries",daoFactory.getTestBookDao().find(testBookId).getTestSerieList());
 		return ret;
 	}
 
@@ -158,8 +159,8 @@ public class TestController {
 		return new ModelAndView("notest");
 	}
 
-	public ModelAndView listNotFound() {
-		return new ModelAndView("books");
-	}
+//	public ModelAndView listNotFound() {
+//		return new ModelAndView("books");
+//	}
 
 }

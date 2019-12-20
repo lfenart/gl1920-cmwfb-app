@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import fr.uha.ensisa.gl.cmwfb.mantest.Step;
 import fr.uha.ensisa.gl.cmwfb.mantest.TestReport;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.DaoFactory;
+import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestBookDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestReportDao;
 import fr.uha.ensisa.gl.cmwfb.mantest.dao.TestSerieDao;
@@ -33,6 +34,8 @@ public class TestReportControllerTest {
 	public TestReportController sut;
 	@Mock
 	private TestSerieDao daoTestSerie;
+	@Mock
+	private TestBookDao daoTestBook;
 
 	@Before
 	public void prepareDao() {
@@ -42,6 +45,7 @@ public class TestReportControllerTest {
 		sut.daoFactory = this.daoFactory;
 		when(daoFactory.getTestReportDao()).thenReturn(this.daoTestReport);
 		when(daoFactory.getTestSerieDao()).thenReturn(this.daoTestSerie);
+		when(daoFactory.getTestBookDao()).thenReturn(this.daoTestBook);
 	}
 
 	@Test
@@ -73,6 +77,8 @@ public class TestReportControllerTest {
 	@Test
 	public void makeReport() {
 		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
+		fr.uha.ensisa.gl.cmwfb.mantest.TestBook testBook = new fr.uha.ensisa.gl.cmwfb.mantest.TestBook();
+		when(daoTestBook.find(1)).thenReturn(testBook);
 		TestReport report = new TestReport(1, test);
 		when(daoTestReport.find(1)).thenReturn(report);
 		ModelAndView ret = sut.makeReportTask(1, 1);
@@ -84,6 +90,8 @@ public class TestReportControllerTest {
 	@Test
 	public void addStepReport() {
 		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
+		fr.uha.ensisa.gl.cmwfb.mantest.TestBook testBook = new fr.uha.ensisa.gl.cmwfb.mantest.TestBook();
+		when(daoTestBook.find(1)).thenReturn(testBook);
 		TestReport report = new TestReport(1, test);
 		when(daoTestReport.find(1)).thenReturn(report);
 		assertEquals("redirect:/viewReport?testBookId=" + 1 + "&id=" + 1, sut.addStepReport(1, 1, "comment", false));

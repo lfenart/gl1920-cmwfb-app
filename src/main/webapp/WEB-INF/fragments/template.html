@@ -16,7 +16,7 @@
 			<nav>
 				<a href = "/books"><p>Cahiers</p></a>
 				<a th:href = "${'/list?testBookId=' + testBookId}"><p>Liste</p></a>
-				<a href = "/creationSerieForm"><p>Nouvelle suite de test</p></a>
+				<a th:href = "${'/creationSerieForm?testBookId=' + testBookId}"><p>Nouvelle suite de test</p></a>
 			</nav>
 		</div>
         <div th:fragment="footer">

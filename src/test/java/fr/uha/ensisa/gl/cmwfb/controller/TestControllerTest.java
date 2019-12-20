@@ -1,12 +1,13 @@
 package fr.uha.ensisa.gl.cmwfb.controller;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,9 +56,9 @@ public class TestControllerTest {
 		when(daoTestBook.find(1)).thenReturn(testBook);
 	}
 
-	/*@Test
+	@Test
 	public void emptyList() throws IOException {
-		ModelAndView ret = sut.list();
+		ModelAndView ret = sut.list(1L);
 		Collection<fr.uha.ensisa.gl.cmwfb.mantest.Test> tests = (Collection<fr.uha.ensisa.gl.cmwfb.mantest.Test>) ret
 				.getModelMap().get("tests");
 		assertNotNull(tests);
@@ -66,10 +67,10 @@ public class TestControllerTest {
 
 	@Test
 	public void createTest() throws IOException {
-		sut.create("test");
+		sut.create(1, "test");
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).find(1);
-	}*/
+	}
 
 	@Test
 	public void modifyTestName() throws IOException {
@@ -81,7 +82,7 @@ public class TestControllerTest {
 		verify(daoTask).find(1);
 		verify(test).setName("name");
 	}
-	
+
 	@Test
 	public void modifyTestStep() throws IOException {
 		fr.uha.ensisa.gl.cmwfb.mantest.Test test = mock(fr.uha.ensisa.gl.cmwfb.mantest.Test.class);
@@ -89,7 +90,7 @@ public class TestControllerTest {
 		daoTask.persist(test);
 		when(daoTask.find(1)).thenReturn(test);
 		when(test.getStep(0)).thenReturn(step);
-		sut.TestModifiedStep(1, 1, 0, "stepname","steptext");
+		sut.TestModifiedStep(1, 1, 0, "stepname", "steptext");
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).find(1);
 		verify(step).setName("stepname");
@@ -101,7 +102,7 @@ public class TestControllerTest {
 		sut.test(1, 1);
 		verify(daoTask).find(1);
 	}
-	
+
 	@Test
 	public void testTest() throws IOException {
 		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
@@ -122,7 +123,45 @@ public class TestControllerTest {
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).remove(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 	}
+
+	@Test
+	public void testAddDeleteStep() {
+		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
+		int testId = 1;
+		test.setId(testId);
+		when(daoTask.find(1)).thenReturn(null, test, test);
+		assertEquals("redirect:/modify?testBookId=" + 1 + "&id=" + testId, sut.testDeleteStep(1, testId, 0));
+		daoTask.persist(test);
+		sut.addStep(1, 1, "step1", "");
+		verify(daoTask).persist(test);
+		verify(daoTask, times(2)).find(1);
+	}
 	
+	@Test
+	public void deleteStep() {
+		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
+		int testId = 1;
+		test.setId(testId);
+		test.addStep(new Step());
+		when(daoTask.find(1)).thenReturn(test);
+		assertEquals("redirect:/modify?testBookId=" + 1 + "&id=" + testId, sut.testDeleteStep(1, testId, 0));
+	}
+
+	@Test
+	public void modify() throws IOException {
+		fr.uha.ensisa.gl.cmwfb.mantest.Test test = new fr.uha.ensisa.gl.cmwfb.mantest.Test();
+		int testId = 1;
+		test.setId(testId);
+		when(daoTask.find(1)).thenReturn(null, test);
+		ModelAndView ret = this.sut.modify(1, testId);
+		assertEquals("notest", ret.getViewName());
+		daoTask.persist(test);
+		ret = this.sut.modify(1, testId);
+		assertEquals("modify", ret.getViewName());
+
+		verify(daoTask).persist(test);
+	}
+
 	@Test
 	public void createTestInvalidId() throws IOException {
 		when(daoTask.find(2)).thenReturn(mock(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
