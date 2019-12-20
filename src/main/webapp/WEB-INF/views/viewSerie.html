@@ -26,13 +26,13 @@
 				</thead>
 				<tbody id="tests">
 					<tr th:each="test: ${tests}" th:id="${'test_' + test.id }">
-						<th scope="row"><a th:href="${'/test?id=' + test.id}">[[${test.id}]]</a></th>
+						<th scope="row"><a th:href="${'/test?testBookId='+testBookId+'&id=' + test.id}">[[${test.id}]]</a></th>
 						<td>[[${test.name}]]</td>
 						<td th:text="${#arrays.length(test.steps)}"></td>
 						<td>[[${test.result}]]</td>
 						<td></td>
 						<td><a
-							th:href="${'/removeTest/?serieId=' + id + '&testId=' + test.id}">Supprimer</a></td>
+							th:href="${'/removeTest/?testBookId='+testBookId+'&serieId=' + id + '&testId=' + test.id}">Supprimer</a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -45,17 +45,18 @@
 					<tr>
 						<th scope="col">#</th>
 						<th scope="col">Nom de la suite de Test</th>
-						<th scope="col"></th>
+						<th scope="col">Supprimer</th>
+						<th scope="col">voir</th>
 					</tr>
 				</thead>
 				<tbody id="viewSeries">
 					<tr th:each="viewSerie: ${series}"
 						th:id="${'viewSerie_' + viewSerie.id }">
 						<th scope="row"><a
-							th:href="${'/viewSerie?id=' + viewSerie.id}">[[${viewSerie.id}]]</a></th>
+							th:href="${'/viewSerie?testBookId='+testBookId+'&id=' + viewSerie.id}">[[${viewSerie.id}]]</a></th>
 						<td>[[${viewSerie.name}]]</td>
 						<td><a
-							th:href="${'/removeviewSerie/?serieId=' + id + '&viewSerieId=' + viewSerie.id}">Supprimer</a></td>
+							th:href="${'/removeTestSerie?testBookId='+testBookId+'&serieId=' + id + '&testSerieId=' + viewSerie.id}">Supprimer</a></td>
 						<td></td>
 					</tr>
 				</tbody>
@@ -63,15 +64,25 @@
 		</div>
 	</div>
 	<form action="/addTest/">
-		<input type="hidden" name="serieId" th:value="${id}" /> <input
-			type="text" name="testId" /><input type="submit" value="addTest" />
+		<input type="hidden" name="testBookId" th:value="${testBookId}" />
+		<input type="hidden" name="serieId" th:value="${id}" /> 
+		<select name="testId">
+			<option th:each="test : ${listTests}" th:value="${test.id}" th:text="${test.name}">
+			</option>
+		</select>
+		<input type="submit" value="addTest" />
 	</form>
 	<form action="/addTestSerie/">
-		<input type="hidden" name="serieId" th:value="${id}" /> <input
-			type="text" name="testSerieId" /><input type="submit"
-			value="addTestSerie" />
+		<input type="hidden" name="testBookId" th:value="${testBookId}" />
+		<input type="hidden" name="serieId" th:value="${id}" /> 
+		<select name="testSerieId">
+			<option th:each="list : ${Lists}" th:value="${list.id}" th:text="${list.name}">
+			</option>
+		</select>
+		<input type="submit" value="addTestSerie" />
 	</form>
 	<form action="/deleteSerie/">
+		<input type="hidden" name="testBookId" th:value="${testBookId}" />
 		<input type="submit" value="deleteSerie" /> <input type="hidden"
 			name="id" th:value="${id}" />
 	</form>
