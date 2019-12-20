@@ -71,22 +71,22 @@ public class HelloIT {
 		}
 	}
 
-//	@Test
-//	public void testConnection() throws Exception {
-//		URL url = new URL("http://localhost:" + port + "/test?id=1");
-//        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//        connection.connect();
-//        assertEquals(200, connection.getResponseCode());
-//        url = new URL("http://localhost:" + port + "/test?id=1000");
-//        connection = (HttpURLConnection) url.openConnection();
-//        connection.connect();
-//        assertEquals(200, connection.getResponseCode());
-//	}
-//	
-//	@Test
-//	public void testNotFound() {
-//		driver.get("http://localhost:" + port + "/test?id=1000");
-//		assertTrue(driver.getPageSource().contains("not found"));
-//	}
+	@Test
+	public void testConnection() throws Exception {
+		URL url = new URL("http://localhost:" + port + "/test?id=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.connect();
+        assertEquals(200, connection.getResponseCode());
+        url = new URL("http://localhost:" + port + "/test?id=1000");
+        connection = (HttpURLConnection) url.openConnection();
+        connection.connect();
+        assertEquals(200, connection.getResponseCode());
+	}
+	
+	@Test
+	public void testNotFound() {
+		driver.get("http://localhost:" + port + "/test?id=1000");
+		assertTrue(driver.getPageSource().contains("not found"));
+	}
 
 }
