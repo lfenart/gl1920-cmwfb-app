@@ -15,8 +15,9 @@
 						</h3>
 						<form th:action=" @{/testmodifiedname} " method="POST" accept-charset="UTF-8">
 							<h2>
-								<strong><u> Nom du test <a th:href="${'/test?id=' + test.id}">#[[${test.id}]]</a> : </u></strong>
+								<strong><u> Nom du test <a th:href="${'/test?id=' +  test.id + '&testBookId=' + testBook.id }">#[[${test.id}]]</a> : </u></strong>
 							</h2>
+							<input type="hidden" name="testBookId" th:value="${testBook.id}">
 							<input type="hidden" name="id" th:value="${test.id}"> 	
 							<input type="text" name="newTestName" th:value="${test.name}" style="color:#220fa3">
 							<input type="submit" name="Modify" value="Modifier" class="btn btn-warning btn-sm">
@@ -31,11 +32,13 @@
 							<tr><td style="vertical-align:top">
 								
 								<form th:action=" @{/testmodifiedstep} " method="POST" accept-charset="UTF-8">
+								
 									<button type="button" class="btn btn-primary btn-circle" data-toggle="collapse" 
 											th:data-target="'#collapse'+${stepStat.index}" aria-expanded="false" th:aria-controls="'collapse'+${stepStat.index}">
 											<i class="fa fa-list"></i>
 									</button> 
-										<input type="hidden" name="testId" th:value="${test.id}"> 
+										<input type="hidden" name="testBookId" th:value="${testBook.id}">
+										<input type="hidden" name="id" th:value="${test.id}"> 
 										<input type="hidden" name="stepId" th:value="${stepStat.index}"> 
 										<input type="text"  style="width:50%" name="newStepName" th:value="${step.name}">
 										<input type="submit" name="Modify" value="Modifier" class="btn btn-warning btn-xs">
@@ -49,7 +52,8 @@
 								</td>
 								<td style="vertical-align:top">
 								<form th:action=" @{/testDeleteStep} " method="POST" accept-charset="UTF-8">
-									<input type="hidden" name="testId" th:value="${test.id}"> 
+									<input type="hidden" name="testBookId" th:value="${testBook.id}">
+									<input type="hidden" name="id" th:value="${test.id}"> 
 									<input type="hidden" name="stepId" th:value="${stepStat.index}"> 
 									<input type="submit" name="Supprimer" value="Supprimer" class="btn btn-danger btn-xs">
 								</form>
@@ -61,6 +65,7 @@
 							
 							<hr>
 							<form action="/addStep" method="GET" accept-charset="UTF-8">
+							<input type="hidden" name="testBookId" th:value="${testBook.id}">
 								<div class="form-group">
 									<label for="step">Nom de l'étape :</label> 
 									<input id="step" class="form-control" type="text" name="stepName" required>
@@ -78,7 +83,7 @@
 						</div>
 						<br><br>
 						<div style="text-align: center">
-						<a  th:href="${'/test?id=' + test.id}">Revenir au test</a>
+						<a th:href="${'/test?id=' +  test.id + '&testBookId=' + testBook.id }">Revenir au test</a>
 						</div>
 						
 					</div>

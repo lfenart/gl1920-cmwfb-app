@@ -12,9 +12,9 @@
 	<h3>Veuillez remplir les champs ci-dessous afin de proceder a la
 		creation d'une suite de tests:</h3>
 	<form action="/createSerie/">
+		<input type="hidden" name="testBookId" th:value="${testBookId}" />
 		<label for="name"> Nom de la suite de tests :</label> <input
 			type="text" name="name" placeholder="Nom" /><br> <input
 			type="submit" name="createSerie" value="Creer" />
 	</form>
-</body>
 </html>

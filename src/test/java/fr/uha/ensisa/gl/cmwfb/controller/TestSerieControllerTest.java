@@ -42,7 +42,7 @@ public class TestSerieControllerTest {
 	
 	@Test
 	public void creationSerieForm() {
-		ModelAndView ret = sut.creationSerieForm();
+		ModelAndView ret = sut.creationSerieForm(1L);
 		assertEquals("createTestSerie",ret.getViewName());
 	}
 	
@@ -52,7 +52,7 @@ public class TestSerieControllerTest {
 		String serieName="serie1";
 		fr.uha.ensisa.gl.cmwfb.mantest.TestSerie serie = new fr.uha.ensisa.gl.cmwfb.mantest.TestSerie(1,serieName);
 		when(daoTestSerie.create(serieName)).thenReturn(serie);
-		String link = sut.createSerie(serieName);
+		String link = sut.createSerie(1L,serieName);
 		assertEquals("redirect:/viewSerie?id=1",link);
 		verify(daoTestSerie).create(serieName);
 		verify(daoTestSerie).persist(serie);
@@ -68,7 +68,7 @@ public class TestSerieControllerTest {
 		
 		when(daoTestSerie.find(1)).thenReturn(serieTest);
 		
-		sut.addTest(1, 1);
+		sut.addTest(1L ,1,1);
 		
 		verify(daoTask).find(1);
 		verify(daoTestSerie).find(1);
@@ -83,7 +83,7 @@ public class TestSerieControllerTest {
 		
 		when(daoTask.find(1)).thenReturn(test);
 		when(daoTestSerie.find(1)).thenReturn(serieTest);
-		String link = sut.removeTest(1, 1);
+		String link = sut.removeTest(1L ,1L,1L);
 		assertEquals("redirect:/viewSerie?id=1",link);
 		
 		verify(daoTask).find(1);
@@ -98,7 +98,7 @@ public class TestSerieControllerTest {
 		when(daoTestSerie.find(1)).thenReturn(serieTest1);
 		when(daoTestSerie.find(2)).thenReturn(serieTest2);
 		
-		sut.addTestSerie(1, 2);
+		sut.addTestSerie(1L ,1, 2);
 		
 		verify(daoTestSerie,times(2)).find(any(Long.class));		
 	}
@@ -112,7 +112,7 @@ public class TestSerieControllerTest {
 		when(daoTestSerie.find(1)).thenReturn(serieTest1);
 		when(daoTestSerie.find(2)).thenReturn(serieTest2);
 		
-		String link = sut.removeTestSerie(1, 2);
+		String link = sut.removeTestSerie(1L ,1, 2);
 		assertEquals("redirect:/viewSerie?id=1",link);
 		
 		verify(daoTestSerie,times(2)).find(any(Long.class));	
@@ -127,7 +127,7 @@ public class TestSerieControllerTest {
 		when(daoTestSerie.find(1)).thenReturn(serieTest);
 		serieTest.add(test);
 		
-		ModelAndView ret = sut.reportSerie(1);
+		ModelAndView ret = sut.reportSerie(1L,1);
 		assertEquals("viewSerie",ret.getViewName());
 		
 		fr.uha.ensisa.gl.cmwfb.mantest.Test[] tests = (fr.uha.ensisa.gl.cmwfb.mantest.Test[]) ret.getModelMap().get("tests");
@@ -142,8 +142,8 @@ public class TestSerieControllerTest {
 		fr.uha.ensisa.gl.cmwfb.mantest.TestSerie serieTest = new fr.uha.ensisa.gl.cmwfb.mantest.TestSerie(1,"serie1");
 		when(daoTestSerie.find(1)).thenReturn(null,serieTest);
 		
-		sut.deleteSerie(1);
-		sut.deleteSerie(1);
+		sut.deleteSerie(1L,1L);
+		sut.deleteSerie(1L,1L);
 		
 		verify(daoTestSerie,times(2)).find(1);	
 		verify(daoTestSerie).deleteSerie(any(fr.uha.ensisa.gl.cmwfb.mantest.TestSerie.class));
