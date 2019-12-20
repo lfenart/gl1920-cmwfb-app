@@ -56,17 +56,21 @@ public class TestControllerTest {
 		when(daoTestBook.find(1)).thenReturn(testBook);
 	}
 
-	/*
-	 * @Test public void emptyList() throws IOException { ModelAndView ret =
-	 * sut.list(); Collection<fr.uha.ensisa.gl.cmwfb.mantest.Test> tests =
-	 * (Collection<fr.uha.ensisa.gl.cmwfb.mantest.Test>) ret
-	 * .getModelMap().get("tests"); assertNotNull(tests);
-	 * assertTrue(tests.isEmpty()); }
-	 * 
-	 * @Test public void createTest() throws IOException { sut.create("test");
-	 * verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
-	 * verify(daoTask).find(1); }
-	 */
+	@Test
+	public void emptyList() throws IOException {
+		ModelAndView ret = sut.list(1L);
+		Collection<fr.uha.ensisa.gl.cmwfb.mantest.Test> tests = (Collection<fr.uha.ensisa.gl.cmwfb.mantest.Test>) ret
+				.getModelMap().get("tests");
+		assertNotNull(tests);
+		assertTrue(tests.isEmpty());
+	}
+
+	@Test
+	public void createTest() throws IOException {
+		sut.create(1, "test");
+		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
+		verify(daoTask).find(1);
+	}
 
 	@Test
 	public void modifyTestName() throws IOException {
@@ -155,5 +159,10 @@ public class TestControllerTest {
 		sut.create(1, "test");
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).find(3);
+	}
+
+	@Test
+	public void list() throws IOException {
+
 	}
 }
