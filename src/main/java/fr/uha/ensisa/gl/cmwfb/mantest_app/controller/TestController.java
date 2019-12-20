@@ -67,9 +67,7 @@ public class TestController {
 	public String TestModifiedName(@RequestParam(required = true) long id,
 			@RequestParam(required = true) String newTestName) throws IOException {
 		Test test = daoFactory.getTestDao().find(id);
-		if (test == null) {
-			testNotFound();
-		} else {
+		if (test != null) {
 			test.setName(newTestName);
 		}
 		return "redirect:/modify?id=" + id;

@@ -21,23 +21,22 @@ public class TestReportController {
 
 	@Autowired
 	public DaoFactory daoFactory;
-	
+
 	@RequestMapping(value = "/createReport")
 	public String createReport(@RequestParam(required = true) long id) {
 		Test test = this.daoFactory.getTestDao().find(id);
-		if (test !=null) {
+		if (test != null) {
 			TestReport testReport = this.daoFactory.getTestReportDao().create(test);
-			
-			if(testReport.getNextStep() != null) {
-				return "redirect:/makeReport?id=" + testReport.getId();	
-				}
-				else {
-					return "redirect:/test?id=" + id;
-				}
+
+			if (testReport.getNextStep() != null) {
+				return "redirect:/makeReport?id=" + testReport.getId();
+			} else {
+				return "redirect:/test?id=" + id;
+			}
 		}
 		return "redirect:/test?id=" + id;
 	}
-		
+
 	@RequestMapping(value = "/makeReport")
 	public ModelAndView makeReportTask(@RequestParam long id) {
 		ModelAndView ret = new ModelAndView("makeReport");
@@ -50,36 +49,35 @@ public class TestReportController {
 		ret.addObject("testReport", testReport);
 		return ret;
 	}
-	
+
 	@RequestMapping(value = "/addStepReport")
-	private String addStepReport(@RequestParam(required = true) long id,
-			@RequestParam(required = true) String comment, @RequestParam(required = true) boolean success) {
+	public String addStepReport(@RequestParam(required = true) long id, @RequestParam(required = true) String comment,
+			@RequestParam(required = true) boolean success) {
 		TestReport testReport = daoFactory.getTestReportDao().find(id);
 		testReport.next(success, comment);
-		if(testReport.getNextStep() != null) {
-			return "redirect:/makeReport?id=" + testReport.getId();	
-		}
-		else{
-			return "redirect:/viewReport?id=" + testReport.getId();	
+		if (testReport.getNextStep() != null) {
+			return "redirect:/makeReport?id=" + testReport.getId();
+		} else {
+			return "redirect:/viewReport?id=" + testReport.getId();
 		}
 	}
-	
+
 	@RequestMapping(value = "/viewReport")
-	public  ModelAndView reportTask(@RequestParam long id) {
+	public ModelAndView reportTask(@RequestParam long id) {
 		TestReport currentReport = daoFactory.getTestReportDao().find(id);
 		Test currentTest = currentReport.getTest();
 		List<Step> currentSteps = currentTest.getSteps();
-		List<StepReport> stepReports= currentReport.getStepReports();
+		List<StepReport> stepReports = currentReport.getStepReports();
 		ModelAndView ret = new ModelAndView("viewReport");
 		Calendar c = currentReport.getCalendar();
-		SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy à hh:mm:ss aa");  
-	    String datetime = dateformat.format(c.getTime());
-	    ret.addObject("dateTime", datetime);
+		SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy à hh:mm:ss aa");
+		String datetime = dateformat.format(c.getTime());
+		ret.addObject("dateTime", datetime);
 		ret.addObject("test", currentTest);
 		ret.addObject("testReport", currentReport);
-		ret.addObject("Steps",currentSteps);
-		ret.addObject("StepReports", stepReports );
+		ret.addObject("Steps", currentSteps);
+		ret.addObject("StepReports", stepReports);
 		return ret;
 	}
-	
+
 }

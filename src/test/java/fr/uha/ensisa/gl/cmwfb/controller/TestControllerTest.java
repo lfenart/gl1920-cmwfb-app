@@ -114,4 +114,13 @@ public class TestControllerTest {
 		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 		verify(daoTask).remove(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
 	}
+	
+	@Test
+	public void createTestInvalidId() throws IOException {
+		when(daoTask.find(2)).thenReturn(mock(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
+		when(daoTask.count()).thenReturn(1L);
+		sut.create("test");
+		verify(daoTask).persist(any(fr.uha.ensisa.gl.cmwfb.mantest.Test.class));
+		verify(daoTask).find(3);
+	}
 }
